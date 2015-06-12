@@ -1,11 +1,19 @@
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #include "gl\glut.h"
 
 #include "glm.h"
 
 #define	G_PI 3.14159265358979323846f
+
+using namespace std;
+bool bAnim = false;      //the flag of rotation 
+float fRotate = 20.0f;
+
+void idle();                           //use the function to do display repeatly        
+void reshape(int width, int height);
 
 void prepare_lighting();  //control the light
 void display();           //control the content of display
@@ -27,9 +35,10 @@ void main()
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
-	{
-		list_id = drawOBJ("plant.obj");
-	}
+	glutIdleFunc(idle);
+	//glutReshapeFunc(reshape);
+
+	list_id = drawOBJ("monkey.obj");
 
 	prepare_lighting();
 
@@ -62,6 +71,12 @@ void keyboard(unsigned char key, int x, int y)
 		prepare_lighting();
 		glutPostRedisplay();
 		break;
+
+	case ' ':
+	{
+		bAnim = !bAnim;
+		break;
+	}
 	};
 }
 
@@ -98,6 +113,12 @@ void display()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 
+	if (bAnim)
+		fRotate += 0.5f;
+	cout << fRotate << endl;
+	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
+
+
 	glCallList(list_id);
 
 	glutSwapBuffers();
@@ -116,4 +137,27 @@ void prepare_lighting()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glEnable(GL_LIGHT0);
+}
+
+void idle()
+{
+	glutPostRedisplay();
+}
+
+void reshape(int width, int height)
+{
+	if (height == 0)										// Prevent A Divide By Zero By
+	{
+		height = 1;										// Making Height Equal One
+	}
+
+	glViewport(0, 0, width, height);						// Reset The Current Viewport
+
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+
+	float whRatio = (GLfloat)width / (GLfloat)height;
+	gluPerspective(45, whRatio, 1, 1000);
+
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 }
