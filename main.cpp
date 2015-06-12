@@ -1,226 +1,119 @@
-#include <stdlib.h>
-#include <vector>
-#include <gl/GLUT.h>
-#include "glm/glm.hpp"
-#include "obj.h"
+#include <stdio.h>
+#include <math.h>
 
-using namespace std;
-float fTranslate;
-float fRotate;
-float fScale = 1.0f;	// set inital scale value to 1.0f
-float test = 0;
+#include "gl\glut.h"
 
-bool bPersp = false;
-bool bAnim = false;
-bool bWire = false;
+#include "glm.h"
 
-float eye[] = { 0, 0, 8 };
-float center[] = { 0, 0, 0 };
+#define	G_PI 3.14159265358979323846f
 
-int wHeight = 0;
-int wWidth = 0;
+void prepare_lighting();  //control the light
+void display();           //control the content of display
+void keyboard(unsigned char key, int x, int y);  //control the reflection of keyboard
+GLuint drawOBJ(char * filename);      //load the obj model 
 
-//obj
-vector<glm::vec3> out_vertices;
-vector<glm::vec2> out_uvs;
-vector<glm::vec3> out_normals;
+float theta, phi;
 
-void Draw_Leg();
+GLuint list_id;
 
-void Draw_Triangle() // This function draws a triangle with RGB colors
+void main()
 {
-	glPushMatrix();
-	glTranslatef(0, 0, 4 + 1);
-	glRotatef(90, 1, 0, 0);
-	glutSolidTeapot(1);
-	glPopMatrix();
+	theta = G_PI / 2;
+	phi = -G_PI / 2;
 
-	glPushMatrix();
-	glTranslatef(0, 0, 3.5);
-	glScalef(5, 4, 1);
-	glutSolidCube(1.0);
-	glPopMatrix();
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);
+	glutInitWindowSize(640, 640);
+	glutCreateWindow("glutTest08");
 
-	glPushMatrix();
-	glTranslatef(1.5, 1, 1.5);
-	Draw_Leg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.5, 1, 1.5);
-	Draw_Leg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(1.5, -1, 1.5);
-	Draw_Leg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.5, -1, 1.5);
-	Draw_Leg();
-	glPopMatrix();
-
-}
-
-void Draw_Leg()
-{
-	glScalef(1, 1, 3);
-	glutSolidCube(1.0);
-}
-
-void updateView(int width, int height)
-{
-	glViewport(0, 0, width, height);						// Reset The Current Viewport
-
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-
-	float whRatio = (GLfloat)width / (GLfloat)height;
-	if (bPersp) {
-		gluPerspective(45.0f, whRatio, 0.1f, 100.0f);
-		//glFrustum(-3, 3, -3, 3, 3,100);
-	}
-	else {
-		glOrtho(-3, 3, -3, 3, -100, 100);
-	}
-
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-}
-
-void reshape(int width, int height)
-{
-	if (height == 0)										// Prevent A Divide By Zero By
+	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
 	{
-		height = 1;										// Making Height Equal One
+		list_id = drawOBJ("plant.obj");
 	}
 
-	wHeight = height;
-	wWidth = width;
+	prepare_lighting();
 
-	updateView(wHeight, wWidth);
+	glutMainLoop();
 }
 
-void idle()
+void keyboard(unsigned char key, int x, int y)
 {
-	glutPostRedisplay();
-}
-
-void key(unsigned char k, int x, int y)
-{
-	switch (k)
+	switch (key)
 	{
-	case 27:
-	case 'q': {exit(0); break; }
-	case 'p': {bPersp = !bPersp; break; }
+	case 'w':
+		theta -= .05;
+		prepare_lighting();
+		glutPostRedisplay();
+		break;
+	case 's':
+		theta += .05;
+		prepare_lighting();
+		glutPostRedisplay();
+		break;
 
-	case ' ': {bAnim = !bAnim; break; }
-	case 'o': {bWire = !bWire; break; }
+	case 'a':
+		phi -= .05;
+		prepare_lighting();
+		glutPostRedisplay();
+		break;
 
-	case 'a': {
-		eye[0] -= 0.2f;
-		center[0] -= 0.2f;
+	case 'd':
+		phi += .05;
+		prepare_lighting();
+		glutPostRedisplay();
 		break;
-	}
-	case 'd': {
-		eye[0] += 0.2f;
-		center[0] += 0.2f;
-		break;
-	}
-	case 'w': {
-		eye[1] -= 0.2f;
-		center[1] -= 0.2f;
-		break;
-	}
-	case 's': {
-		eye[1] += 0.2f;
-		center[1] += 0.2f;
-		break;
-	}
-	case 'z': {
-		eye[2] -= 0.2f;
-		center[2] -= 0.2f;
-		break;
-	}
-	case 'c': {
-		eye[2] += 0.2f;
-		center[2] += 0.2f;
-		break;
-	}
-	case 'Z': {
-		test += 0.1;
-		break;
-	}
-	case 'C': {
-		eye[2] += 0.2f;
-		center[2] += 0.2f;
-		break;
-	}
-	}
-
-	updateView(wHeight, wWidth);
+	};
 }
 
+GLuint drawOBJ(char * filename){
+	GLMmodel *glm_model;
+	GLuint list;
+	glm_model = glmReadOBJ(filename);
+	glmUnitize(glm_model);
+	glmScale(glm_model, .1);
+	glmFacetNormals(glm_model);
+	glmVertexNormals(glm_model, 90);
 
-void redraw()
-{
+	list = glmList(glm_model, GLM_MATERIAL | GLM_SMOOTH);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();									// Reset The Current Modelview Matrix
-
-	gluLookAt(eye[0], eye[1], eye[2],
-		center[0], center[1], center[2],
-		0, 1, 0);
-
-	if (bWire) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-	GLfloat white[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_pos[] = { 5, 5, 5, 1 };
-
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
-	glEnable(GL_LIGHT0);
-
-	//	glTranslatef(0.0f, 0.0f,-6.0f);			// Place the triangle at Center
-	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
-	glRotatef(-90, 1, 0, 0);
-	glScalef(0.2, 0.2, 0.2);
-	//Draw_Triangle();						// Draw triangle
-	drawOBJ(out_vertices, out_normals);
-	if (bAnim) fRotate += 0.5f;
-	glutSwapBuffers();
+	glmDelete(glm_model);
+	return list;
 }
 
 void display()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	drawOBJ(out_vertices, out_normals);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(20, 1, 0.1, 10);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(
+		0, 0, 1,
+		0, 0, 0,
+		0, 1, 0);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+
+	glCallList(list_id);
+
 	glutSwapBuffers();
 }
 
-int main(int argc, char *argv[])
+void prepare_lighting()
 {
-	loadOBJ("boy.obj", out_vertices, out_uvs, out_normals);
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-	glutInitWindowPosition(10, 10);
-	glutInitWindowSize(480, 480);
-	int windowHandle = glutCreateWindow("Simple GLUT App");
+	theta = fmodf(theta, 2 * G_PI);
+	phi = fmodf(phi, 2 * G_PI);
 
-	glutDisplayFunc(redraw);
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(key);
-	glutIdleFunc(idle);
+	float light_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
+	float mat_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 0 };
 
-	glutMainLoop();
-	return 0;
+	//glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glEnable(GL_LIGHT0);
 }
-
-
