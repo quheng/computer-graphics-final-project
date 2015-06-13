@@ -1,15 +1,17 @@
+#include "gl\glut.h"
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
-
-#include "gl\glut.h"
-
 #include "glm.h"
 
 #define	G_PI 3.14159265358979323846f
 
 using namespace std;
 
+//视角控制
+float angle = 0.0, ratio;
+float view_x = 0.0f, view_y = 0.0, view_z = 1.0f;
+float lx = 0, ly = 0, lz = 0;
 
 bool bAnim = false;      //the flag of rotation 
 float fRotate = 20.0f;
@@ -30,20 +32,25 @@ GLfloat ctrlpoints[5][5][3] = { { { -3, 0.5, 0 }, { -1, 1.5, 0 }, { -2, 2, 0 }, 
 { { -3, 0.5, -4 }, { -1, 1.5, -4 }, { -2, 2, -4 }, { 1, -1, -4 }, { -5, 0, -4 } } };
 
 /*declaration of function*/
+
 void idle();                           //use the function to do display repeatly        
 void reshape(int width, int height);
 
+void orientMe(float ang);
+void moveMeFlat(int i);    //change the view 
+
 void prepare_lighting();  //control the light
 void display();           //control the content of display
+
 void keyboard(unsigned char key, int x, int y);  //control the reflection of keyboard
 GLuint drawOBJ(char * filename);      //load the obj model 
 void myDisplay(void);
-
 
 void main()
 {
 	theta = G_PI / 2;
 	phi = -G_PI / 2;
+
 
 	theNurb1 = gluNewNurbsRenderer();//创建NURBS对象theNurb1
 	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
@@ -52,6 +59,7 @@ void main()
 	theNurb2 = gluNewNurbsRenderer();//创建NURBS对象theNurb2
 	gluNurbsProperty(theNurb2, GLU_SAMPLING_TOLERANCE, 25.0);
 	gluNurbsProperty(theNurb2, GLU_DISPLAY_MODE, GLU_FILL);
+
 
 
 	/*设置特殊效果*/
@@ -66,8 +74,9 @@ void main()
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("glutTest08");
 
-	glutDisplayFunc( myDisplay);
+	glutDisplayFunc( display);
 	glutKeyboardFunc(keyboard);
+
 	glutIdleFunc(idle);
 	//glutReshapeFunc(reshape);
 
@@ -83,11 +92,13 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
+	
 	case 'w':
 		theta -= .05;
 		prepare_lighting();
 		glutPostRedisplay();
 		break;
+
 	case 's':
 		theta += .05;
 		prepare_lighting();
@@ -112,12 +123,20 @@ void keyboard(unsigned char key, int x, int y)
 		glRotatef(spin, 1.0, 1.0, 0.0);
 		glutPostRedisplay();
 		break;
+	
+	case 'q':exit(0); break;
 
 	case ' ':
 	{
 		bAnim = !bAnim;
 		break;
 	}
+
+	//调整视角参数 大写
+	case 'A': angle -= 0.01f; orientMe(angle); break;
+	case 'D': angle += 0.01f; orientMe(angle); break;
+	case 'W': moveMeFlat(1); break;
+	case 'S': moveMeFlat(-1); break;
 	};
 }
 
@@ -159,7 +178,6 @@ void myDisplay(void)
 	glutSwapBuffers();
 }
 
-
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -170,11 +188,12 @@ void display()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(
-		0, 0, 1,
-		0, 0, 0,
-		0, 1, 0);
-
+	cout << view_x << ' ' << view_y << ' ' << view_z << ' ' << endl;
+	
+	gluLookAt(view_x, view_y, view_z,
+		view_x + lx, view_y + ly, view_z + lz,
+		0.0f, 1.0f, 0.0f);
+		
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 
@@ -197,6 +216,7 @@ void display()
 	glCallList(plant);
 	glPopMatrix();
 
+	/*
 	glPushMatrix();
 	//控制第一个NURBS
 	glTranslatef(1.0, 0.0, 0.0);
@@ -212,7 +232,7 @@ void display()
 	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
 	gluEndSurface(theNurb2);
 	glPopMatrix();
-
+	*/
 
 	glutSwapBuffers();
 }
@@ -253,4 +273,14 @@ void reshape(int width, int height)
 	gluPerspective(45, whRatio, 1, 1000);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+}
+
+void orientMe(float ang) {
+	lx = sin(ang);
+	lz = -cos(ang);
+}
+
+void moveMeFlat(int i) {
+	view_x = view_x + i*(lx)*0.1;
+	view_z = view_z + i*(lz)*0.1;
 }
