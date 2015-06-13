@@ -22,7 +22,7 @@ GLuint drawOBJ(char * filename);      //load the obj model
 
 float theta, phi;
 
-GLuint list_id;
+GLuint monkey,plant;
 
 void main()
 {
@@ -38,7 +38,8 @@ void main()
 	glutIdleFunc(idle);
 	//glutReshapeFunc(reshape);
 
-	list_id = drawOBJ("monkey.obj");
+	monkey = drawOBJ("monkey.obj");
+	plant = drawOBJ("plant.obj");
 
 	prepare_lighting();
 
@@ -115,11 +116,23 @@ void display()
 
 	if (bAnim)
 		fRotate += 0.5f;
-	cout << fRotate << endl;
 	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
 
+	glPushMatrix();
+	//控制第一个物体的形状
+	glTranslatef(-0.1f, 0.0f, 0.0f);
+	glScalef(0.5f, 0.5f, 0.5f);
+	glCallList(monkey);
+	glPopMatrix();
 
-	glCallList(list_id);
+
+	glPushMatrix();
+	//控制第二个物体的形状
+	glTranslatef(0.1f, 0.0f, 0.0f);
+	glScalef(0.5f, 0.5f, 0.5f);
+	glCallList(plant);
+	glPopMatrix();
+
 
 	glutSwapBuffers();
 }
