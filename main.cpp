@@ -9,9 +9,27 @@
 #define	G_PI 3.14159265358979323846f
 
 using namespace std;
+
+
 bool bAnim = false;      //the flag of rotation 
 float fRotate = 20.0f;
+float theta, phi;        //contral the light
 
+/*obj model*/
+GLuint monkey, plant;
+
+/*NURBS model*/
+int spin = 0;
+GLfloat knots[10] = { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+GLUnurbsObj *theNurb1;
+GLUnurbsObj *theNurb2;
+GLfloat ctrlpoints[5][5][3] = { { { -3, 0.5, 0 }, { -1, 1.5, 0 }, { -2, 2, 0 }, { 1, -1, 0 }, { -5, 0, 0 } },
+{ { -3, 0.5, -1 }, { -1, 1.5, -1 }, { -2, 2, -1 }, { 1, -1, -1 }, { -5, 0, -1 } },
+{ { -3, 0.5, -2 }, { -1, 1.5, -2 }, { -2, 2, -2 }, { 1, -1, -2 }, { -5, 0, -2 } },
+{ { -3, 0.5, -3 }, { -1, 1.5, -3 }, { -2, 2, -3 }, { 1, -1, -3 }, { -5, 0, -3 } },
+{ { -3, 0.5, -4 }, { -1, 1.5, -4 }, { -2, 2, -4 }, { 1, -1, -4 }, { -5, 0, -4 } } };
+
+/*declaration of function*/
 void idle();                           //use the function to do display repeatly        
 void reshape(int width, int height);
 
@@ -19,21 +37,36 @@ void prepare_lighting();  //control the light
 void display();           //control the content of display
 void keyboard(unsigned char key, int x, int y);  //control the reflection of keyboard
 GLuint drawOBJ(char * filename);      //load the obj model 
+void myDisplay(void);
 
-float theta, phi;
-
-GLuint monkey,plant;
 
 void main()
 {
 	theta = G_PI / 2;
 	phi = -G_PI / 2;
 
+	theNurb1 = gluNewNurbsRenderer();//创建NURBS对象theNurb1
+	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb1, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+
+	theNurb2 = gluNewNurbsRenderer();//创建NURBS对象theNurb2
+	gluNurbsProperty(theNurb2, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb2, GLU_DISPLAY_MODE, GLU_FILL);
+
+
+	/*设置特殊效果*/
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+	glEnable(GL_BLEND);
+	glFrontFace(GL_CW);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
+
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("glutTest08");
 
-	glutDisplayFunc(display);
+	glutDisplayFunc( myDisplay);
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(idle);
 	//glutReshapeFunc(reshape);
@@ -73,6 +106,13 @@ void keyboard(unsigned char key, int x, int y)
 		glutPostRedisplay();
 		break;
 
+		/* 控制NURBS曲面*/
+	case '/':                        
+		spin = spin + 1;
+		glRotatef(spin, 1.0, 1.0, 0.0);
+		glutPostRedisplay();
+		break;
+
 	case ' ':
 	{
 		bAnim = !bAnim;
@@ -95,6 +135,30 @@ GLuint drawOBJ(char * filename){
 	glmDelete(glm_model);
 	return list;
 }
+
+void myDisplay(void)
+{
+	GLfloat knots[10] = { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glRotatef(50.0, 1.0, 1.0, 0.0);
+
+	glPushMatrix();
+	glTranslatef(1.0, 0.0, 0.0);
+	gluBeginSurface(theNurb1);
+	gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(7.0, 0.0, 0.0);
+	gluBeginSurface(theNurb2);
+	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb2);
+	glPopMatrix();
+	glutSwapBuffers();
+}
+
 
 void display()
 {
@@ -119,7 +183,7 @@ void display()
 	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
 
 	glPushMatrix();
-	//控制第一个物体的形状
+	//控制第一个obj
 	glTranslatef(-0.1f, 0.0f, 0.0f);
 	glScalef(0.5f, 0.5f, 0.5f);
 	glCallList(monkey);
@@ -127,10 +191,26 @@ void display()
 
 
 	glPushMatrix();
-	//控制第二个物体的形状
+	//控制第二个obj
 	glTranslatef(0.1f, 0.0f, 0.0f);
 	glScalef(0.5f, 0.5f, 0.5f);
 	glCallList(plant);
+	glPopMatrix();
+
+	glPushMatrix();
+	//控制第一个NURBS
+	glTranslatef(1.0, 0.0, 0.0);
+	gluBeginSurface(theNurb1);
+	gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb1);
+	glPopMatrix();
+
+	glPushMatrix();
+	//控制第二个NURBS
+	glTranslatef(7.0, 0.0, 0.0);
+	gluBeginSurface(theNurb2);
+	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb2);
 	glPopMatrix();
 
 
@@ -146,7 +226,7 @@ void prepare_lighting()
 	float mat_diffuse[4] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_position[4] = { sinf(theta) * cosf(phi), cosf(theta), -sinf(theta) * sinf(phi), 0 };
 
-	//glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glEnable(GL_LIGHT0);
