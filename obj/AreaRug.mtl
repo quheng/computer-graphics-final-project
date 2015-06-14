@@ -1,0 +1,30 @@
+# Alias Wavefront MTL File Exported from SketchUp
+# with OBJexporter (c) 2013 TIG
+# Made for 'AreaRug.obj'
+
+newmtl Default_Material
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl 0136_Charcoal
+Ka 0.137255 0.137255 0.137255
+Kd 0.137255 0.137255 0.137255
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl Casual50AlderBlueRug
+Ka 0.462745 0.470588 0.388235
+Kd 0.462745 0.470588 0.388235
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd AreaRug_Textures/Casual50AlderBlueRug.jpg
+
+#EOF

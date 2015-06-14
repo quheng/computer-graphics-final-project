@@ -1,0 +1,56 @@
+# Alias Wavefront MTL File Exported from SketchUp
+# with OBJexporter (c) 2013 TIG
+# Made for 'TableDrum.obj'
+
+newmtl Default_Material
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl 0137_Black
+Ka 0 0 0
+Kd 0 0 0
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl Wood_Cherry
+Ka 0.360784 0.113725 0.0431373
+Kd 0.360784 0.113725 0.0431373
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd TableDrum_Textures/Wood_Cherry.PNG
+
+newmtl leather-09
+Ka 0.14902 0.156863 0.180392
+Kd 0.14902 0.156863 0.180392
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd TableDrum_Textures/leather-09.PNG
+
+newmtl GOLD
+Ka 0.639216 0.576471 0.27451
+Kd 0.639216 0.576471 0.27451
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd TableDrum_Textures/GOLD.PNG
+
+newmtl 0136_Charcoal
+Ka 0.137255 0.137255 0.137255
+Kd 0.137255 0.137255 0.137255
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+#EOF

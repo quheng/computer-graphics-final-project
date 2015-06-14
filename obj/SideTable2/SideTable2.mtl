@@ -1,0 +1,40 @@
+# Alias Wavefront MTL File Exported from SketchUp
+# with OBJexporter (c) 2013 TIG
+# Made for 'SideTable2.obj'
+
+newmtl Default_Material
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl Wood03
+Ka 0.588235 0.505882 0.396078
+Kd 0.588235 0.505882 0.396078
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd SideTable2_Textures/Wood03.jpg
+
+newmtl MT_17
+Ka 0.67451 0.67451 0.67451
+Kd 0.67451 0.67451 0.67451
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd SideTable2_Textures/MT_17.jpg
+
+newmtl Material12
+Ka 0.560784 0.564706 0.529412
+Kd 0.560784 0.564706 0.529412
+Ks 0.333 0.333 0.333
+Ns 0
+d 0.7
+Tr 0.7
+map_Kd SideTable2_Textures/Material12.jpg
+
+#EOF

@@ -1,0 +1,48 @@
+# Alias Wavefront MTL File Exported from SketchUp
+# with OBJexporter (c) 2013 TIG
+# Made for 'Settee.obj'
+
+newmtl Default_Material
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl Thomasville-Fabric-5988-55
+Ka 0.501961 0.564706 0.560784
+Kd 0.501961 0.564706 0.560784
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd Settee_Textures/Thomasville-Fabric-5988-55.jpg
+
+newmtl Thomasville-Fabric-5988-64
+Ka 0.0901961 0.152941 0.239216
+Kd 0.0901961 0.152941 0.239216
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd Settee_Textures/Thomasville-Fabric-5988-64.jpg
+
+newmtl Thomasville-Fabric-7121-55
+Ka 0.541176 0.588235 0.588235
+Kd 0.541176 0.588235 0.588235
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd Settee_Textures/Thomasville-Fabric-7121-55.jpg
+
+newmtl 0136_Charcoal
+Ka 0.137255 0.137255 0.137255
+Kd 0.137255 0.137255 0.137255
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+#EOF

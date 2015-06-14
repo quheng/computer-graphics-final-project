@@ -1,0 +1,47 @@
+# Alias Wavefront MTL File Exported from SketchUp
+# with OBJexporter (c) 2013 TIG
+# Made for 'Lamp.obj'
+
+newmtl Default_Material
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl 0137_Black
+Ka 0 0 0
+Kd 0 0 0
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl GOLD
+Ka 0.639216 0.576471 0.27451
+Kd 0.639216 0.576471 0.27451
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd Lamp_Textures/GOLD.PNG
+
+newmtl SW_6223_Still_Water
+Ka 0.247059 0.345098 0.372549
+Kd 0.247059 0.345098 0.372549
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+
+newmtl Material10
+Ka 0.470588 0.560784 0.588235
+Kd 0.470588 0.560784 0.588235
+Ks 0.333 0.333 0.333
+Ns 0
+d 1
+Tr 1
+map_Kd Lamp_Textures/Material10.PNG
+
+#EOF
