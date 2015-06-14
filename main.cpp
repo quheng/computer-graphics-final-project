@@ -20,16 +20,6 @@ float theta, phi;        //contral the light
 /*obj model*/
 GLuint monkey, plant;
 
-/*NURBS model*/
-int spin = 0;
-GLfloat knots[10] = { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-GLUnurbsObj *theNurb1;
-GLUnurbsObj *theNurb2;
-GLfloat ctrlpoints[5][5][3] = { { { -3, 0.5, 0 }, { -1, 1.5, 0 }, { -2, 2, 0 }, { 1, -1, 0 }, { -5, 0, 0 } },
-{ { -3, 0.5, -1 }, { -1, 1.5, -1 }, { -2, 2, -1 }, { 1, -1, -1 }, { -5, 0, -1 } },
-{ { -3, 0.5, -2 }, { -1, 1.5, -2 }, { -2, 2, -2 }, { 1, -1, -2 }, { -5, 0, -2 } },
-{ { -3, 0.5, -3 }, { -1, 1.5, -3 }, { -2, 2, -3 }, { 1, -1, -3 }, { -5, 0, -3 } },
-{ { -3, 0.5, -4 }, { -1, 1.5, -4 }, { -2, 2, -4 }, { 1, -1, -4 }, { -5, 0, -4 } } };
 
 /*declaration of function*/
 
@@ -44,23 +34,11 @@ void display();           //control the content of display
 
 void keyboard(unsigned char key, int x, int y);  //control the reflection of keyboard
 GLuint drawOBJ(char * filename);      //load the obj model 
-void myDisplay(void);
 
 void main()
 {
 	theta = G_PI / 2;
 	phi = -G_PI / 2;
-
-
-	theNurb1 = gluNewNurbsRenderer();//创建NURBS对象theNurb1
-	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
-	gluNurbsProperty(theNurb1, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
-
-	theNurb2 = gluNewNurbsRenderer();//创建NURBS对象theNurb2
-	gluNurbsProperty(theNurb2, GLU_SAMPLING_TOLERANCE, 25.0);
-	gluNurbsProperty(theNurb2, GLU_DISPLAY_MODE, GLU_FILL);
-
-
 
 	/*设置特殊效果*/
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -80,8 +58,8 @@ void main()
 	glutIdleFunc(idle);
 	//glutReshapeFunc(reshape);
 
-	monkey = drawOBJ("monkey.obj");
-	plant = drawOBJ("plant.obj");
+	monkey = drawOBJ("obj/Lamp.obj");
+	plant = drawOBJ("obj/Sofa/Sofa.obj");
 
 	prepare_lighting();
 
@@ -92,7 +70,6 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-	
 	case 'w':
 		theta -= .05;
 		prepare_lighting();
@@ -117,13 +94,6 @@ void keyboard(unsigned char key, int x, int y)
 		glutPostRedisplay();
 		break;
 
-		/* 控制NURBS曲面*/
-	case '/':                        
-		spin = spin + 1;
-		glRotatef(spin, 1.0, 1.0, 0.0);
-		glutPostRedisplay();
-		break;
-	
 	case 'q':exit(0); break;
 
 	case ' ':
@@ -155,29 +125,6 @@ GLuint drawOBJ(char * filename){
 	return list;
 }
 
-void myDisplay(void)
-{
-	GLfloat knots[10] = { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glRotatef(50.0, 1.0, 1.0, 0.0);
-
-	glPushMatrix();
-	glTranslatef(1.0, 0.0, 0.0);
-	gluBeginSurface(theNurb1);
-	gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
-	gluEndSurface(theNurb1);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(7.0, 0.0, 0.0);
-	gluBeginSurface(theNurb2);
-	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
-	gluEndSurface(theNurb2);
-	glPopMatrix();
-	glutSwapBuffers();
-}
-
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -188,7 +135,6 @@ void display()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	cout << view_x << ' ' << view_y << ' ' << view_z << ' ' << endl;
 	
 	gluLookAt(view_x, view_y, view_z,
 		view_x + lx, view_y + ly, view_z + lz,
