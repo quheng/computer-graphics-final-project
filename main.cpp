@@ -1,4 +1,4 @@
-#include "gl\glut.h"
+ï»¿#include "GL/glut.h"
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
@@ -8,17 +8,21 @@
 
 using namespace std;
 
-//ÊÓ½Ç¿ØÖÆ
+//control the view
 float angle = 0.0, ratio;
 float view_x = 0.0f, view_y = 0.0, view_z = 1.0f;
 float lx = 0, ly = 0, lz = 0;
 
 bool bAnim = false;      //the flag of rotation 
 float fRotate = 20.0f;
-float theta, phi;        //contral the light
+
+
+//contral the light
+float theta = G_PI / 2;
+float phi = -G_PI / 2;         
 
 /*obj model*/
-GLuint monkey, plant;
+GLuint lamp, sofa, coffeeTable, settee;
 
 
 /*declaration of function*/
@@ -37,30 +41,21 @@ GLuint drawOBJ(char * filename);      //load the obj model
 
 void main()
 {
-	theta = G_PI / 2;
-	phi = -G_PI / 2;
-
-	/*ÉèÖÃÌØÊâĞ§¹û*/
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-	glEnable(GL_BLEND);
-	glFrontFace(GL_CW);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_LINE_SMOOTH);
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("glutTest08");
 
-	glutDisplayFunc( display);
+	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 
 	glutIdleFunc(idle);
 	//glutReshapeFunc(reshape);
 
-	monkey = drawOBJ("obj/Lamp.obj");
-	plant = drawOBJ("obj/Sofa/Sofa.obj");
-
+	lamp = drawOBJ("obj/Lamp/Lamp.obj");
+	sofa = drawOBJ("obj/Sofa/Sofa.obj");
+	coffeeTable = drawOBJ("obj/CoffeeTable/CoffeeTable.obj");
+	settee = drawOBJ("obj/Settee/Settee.obj");
 	prepare_lighting();
 
 	glutMainLoop();
@@ -102,7 +97,7 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	}
 
-	//µ÷ÕûÊÓ½Ç²ÎÊı ´óĞ´
+	//ÂµÃ·Ã•Ã»ÃŠÃ“Â½Ã‡Â²ÃÃŠÃ½ Â´Ã³ÃÂ´
 	case 'A': angle -= 0.01f; orientMe(angle); break;
 	case 'D': angle += 0.01f; orientMe(angle); break;
 	case 'W': moveMeFlat(1); break;
@@ -135,11 +130,11 @@ void display()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
+
 	gluLookAt(view_x, view_y, view_z,
 		view_x + lx, view_y + ly, view_z + lz,
 		0.0f, 1.0f, 0.0f);
-		
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 
@@ -148,23 +143,37 @@ void display()
 	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
 
 	glPushMatrix();
-	//¿ØÖÆµÚÒ»¸öobj
-	glTranslatef(-0.1f, 0.0f, 0.0f);
-	glScalef(0.5f, 0.5f, 0.5f);
-	glCallList(monkey);
+	//Â¿Ã˜Ã–Ã†ÂµÃšÃ’Â»Â¸Ã¶obj
+	glTranslatef(0.05f, -0.002f, 0.0f);
+	glScalef(0.18f, 0.18f, 0.18f);
+	glCallList(lamp);
 	glPopMatrix();
 
 
 	glPushMatrix();
-	//¿ØÖÆµÚ¶ş¸öobj
-	glTranslatef(0.1f, 0.0f, 0.0f);
+	//Â¿Ã˜Ã–Ã†ÂµÃšÂ¶Ã¾Â¸Ã¶obj
+	glTranslatef(0.05f, -0.01f, -0.03f);
+	glScalef(0.6f, 0.6f, 0.6f);
+	glCallList(sofa);
+	glPopMatrix();
+
+	glPushMatrix();
+	//Â¿Ã˜Ã–Ã†ÂµÃšÃˆÃ½Â¸Ã¶obj
+	glTranslatef(0.04f, -0.012f, 0.01f);
 	glScalef(0.5f, 0.5f, 0.5f);
-	glCallList(plant);
+	glCallList(coffeeTable);
+	glPopMatrix();
+
+	glPushMatrix();
+	//Â¿Ã˜Ã–Ã†ÂµÃšÃ‹Ã„Â¸Ã¶obj
+	glTranslatef(0.0f, -0.01f, 0.0f);
+	glScalef(0.3f, 0.3f, 0.3f);
+	glCallList(settee);
 	glPopMatrix();
 
 	/*
 	glPushMatrix();
-	//¿ØÖÆµÚÒ»¸öNURBS
+	//Â¿Ã˜Ã–Ã†ÂµÃšÃ’Â»Â¸Ã¶NURBS
 	glTranslatef(1.0, 0.0, 0.0);
 	gluBeginSurface(theNurb1);
 	gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
@@ -172,7 +181,7 @@ void display()
 	glPopMatrix();
 
 	glPushMatrix();
-	//¿ØÖÆµÚ¶ş¸öNURBS
+	//Â¿Ã˜Ã–Ã†ÂµÃšÂ¶Ã¾Â¸Ã¶NURBS
 	glTranslatef(7.0, 0.0, 0.0);
 	gluBeginSurface(theNurb2);
 	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
@@ -185,6 +194,7 @@ void display()
 
 void prepare_lighting()
 {
+	/*
 	theta = fmodf(theta, 2 * G_PI);
 	phi = fmodf(phi, 2 * G_PI);
 
@@ -196,6 +206,7 @@ void prepare_lighting()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glEnable(GL_LIGHT0);
+	*/
 }
 
 void idle()
