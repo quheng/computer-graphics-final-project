@@ -55,3 +55,4 @@ void keyboard(unsigned char key, int x, int y)
 	case 'S': moveMeFlat(-1); break;
 	};
 }
+
