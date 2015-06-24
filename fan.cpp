@@ -41,13 +41,14 @@ void drawfan(bool rot){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, light_diffuse);
 	glPopMatrix();
 
+	/*
 	glPushMatrix();
-	glTranslatef(0, 1.65, 0);
-	glScalef(0.1, 0.1, 0.1);
-	glRotated(90, 0, 1, 0);
+	glTranslatef(0.33, 0, 0);
+	glRotated(90, 1, 0, 0);
+	glScalef(0.05, 0.05, 0.001);
 	gluCylinder(gluNewQuadric(), 0.5, 0.5, 13, 10, 10);
 	glPopMatrix();
-
+	*/
 	if (rot){
 		fantheta += 1;
 		if (fantheta > 360)

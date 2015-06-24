@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+﻿#include <GL/glew.h>
 #include "GL/glut.h"
 #include "glm.h"
 #include <math.h>
@@ -8,12 +8,15 @@
 
 
 
-extern float angle = 0.0, ratio;
-extern float view_x = 0.0f, view_y = 0.0, view_z = 1.0f;
-extern float lx = 0, ly = 0, lz = 0;
-extern float fRotate = 20.0f;
-extern bool fan = true;		//control the fan
-extern bool bAnim = false;      //the flag of rotation
+extern float angle, ratio;
+extern float view_x , view_y , view_z;
+extern float lx, ly, lz;
+extern float fRotate ;
+extern float light_pos[4];
+extern bool fan ;		//control the fan
+extern bool bAnim;      //the flag of rotation
+extern bool bWire;      //the flag of rotation
+
 extern GLuint lamp, sofa, coffeeTable, settee;
 
 void orientMe(float ang) {
@@ -29,7 +32,6 @@ void moveMeFlat(int i) {
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(20, 1, 0.1, 10);
@@ -40,13 +42,20 @@ void display()
 	gluLookAt(view_x, view_y, view_z,
 		view_x + lx, view_y + ly, view_z + lz,
 		0.0f, 1.0f, 0.0f);
-	glEnable(GL_LIGHTING);
+
+	if (bWire) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	GLfloat white[] = { 0.01, 0.01, 0.01, 0.01 };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_TEXTURE_2D);
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-	glColorMaterial(GL_FRONT, GL_SPECULAR);
-	glEnable(GL_COLOR_MATERIAL);
-	drawfan(fan);
 	glPushMatrix();
 	if (bAnim)
 		fRotate += 0.5f;
@@ -79,8 +88,7 @@ void display()
 
 	glPushMatrix();
 	glTranslatef(0.0f, -0.01f, 0.0f);
-	Draw();
+	//drawAVI();
 	glPopMatrix();
-
 	glutSwapBuffers();
 }

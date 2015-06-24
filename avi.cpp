@@ -151,16 +151,15 @@ void Update(DWORD milliseconds)								// Perform Motion Updates Here
 	}
 }
 
-void Draw(void)												// Draw Our Scene
+void drawAVI(void)												// Draw Our Scene
 {
-
 	tickCount = GetTickCount();				// Get The Tick Count
 	Update(tickCount - lastTickCount);	// Update The Counter
 	lastTickCount = tickCount;
 	GrabAVIFrame(frame);										// Grab A Frame From The AVI
-	glLoadIdentity();											// Reset The Modelview Matrix
-	glTranslatef(0.0f, 0.0f, -10.0f);							// Translate 10 Units Into The Screen
-	glBegin(GL_QUADS);										// Begin Drawing A Cube
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTranslatef(0.0f, 0.0f, -2.0f);							// Translate 10 Units Into The Screen
+	glBegin(GL_QUADS);											// Begin Drawing A Cube
 	// Front Face
 	glNormal3f(0.0f, 0.0f, 0.5f);
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
@@ -182,8 +181,6 @@ void Draw(void)												// Draw Our Scene
 
 void initAVI()					// Any GL Init Code & User Initialiazation Goes Here
 {
-	// Start Of User Initialization
 	hdd = DrawDibOpen();										// Grab A Device Context For Our Dib
 	OpenAVI("data/face3.avi");									// Open The AVI File
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 }
