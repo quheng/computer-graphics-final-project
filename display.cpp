@@ -62,7 +62,7 @@ void display()
 	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
 
 	glPushMatrix();
-	glTranslatef(0.05f, -0.002f, 0.0f);
+	glTranslatef(0.05f, 1.0, 1.0f);
 	glScalef(0.18f, 0.18f, 0.18f);
 	glCallList(lamp);
 	glPopMatrix();
@@ -75,7 +75,7 @@ void display()
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.04f, -0.012f, 0.01f);
+	glTranslatef(0.04f, -0.012f, 0);
 	glScalef(0.5f, 0.5f, 0.5f);
 	glCallList(coffeeTable);
 	glPopMatrix();
