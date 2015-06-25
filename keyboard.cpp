@@ -18,28 +18,23 @@ float eyeDeZ;
 void dir_w()  {
 	dir[0] = eye[0] - center[0];
 	dir[2] = eye[2] - center[2];
-	eye[0] -= eyeDeX;
-	eye[2] -= eyeDeZ;
+	eye[0] -= eyeDeX * 0.2;
+	eye[2] -= eyeDeZ * 0.2;
 	center[0] = eye[0] - dir[0];
 	center[2] = eye[2] - dir[2];
 }
 
 void dir_s(){
-		//	printf("e0=%f,e2=%f\n", eye[0], eye[2]);
 		dir[0] = eye[0] - center[0];
 		dir[2] = eye[2] - center[2];
-		//  printf("d0=%f,d2=%f\n", dir[0], dir[2]);
-		eye[0] += eyeDeX;
-		eye[2] += eyeDeZ;
-		//  printf("e0=%f,e2=%f\n", eye[0], eye[2]);
+		eye[0] += eyeDeX *0.2;
+		eye[2] += eyeDeZ *0.2;
 		center[0] = eye[0] - dir[0];
 		center[2] = eye[2] - dir[2];
 }
 void dir_d()  {
-	// angle = angle - 5;
 		dir[0] = center[0] - eye[0];
 		dir[2] = center[2] - eye[2];
-		//  printf("dir0=%f,dir2=%f\n", dir[0], dir[2]);
 		dir[0] = dir[0] * cos(c * 5) - dir[2] * sin(c * 5);
 		dir[2] = dir[0] * sin(c * 5) + dir[2] * cos(c * 5);
 		center[0] = eye[0] + dir[0];
