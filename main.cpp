@@ -29,7 +29,7 @@ bool bWire = false;
 
 float light_pos[4] = { 0, 0, 1, 1 };   //position of light
 /*obj model*/
-GLuint lamp, sofa, coffeeTable, settee;
+GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
 
 /*declaration of function*/
 void initGL();   //initialization
@@ -45,8 +45,8 @@ void main()
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("final");
 	initGL();
-	glutMouseFunc(Mouse);
-	glutMotionFunc(onMouseMove);
+	//glutMouseFunc(Mouse);
+	//glutMotionFunc(onMouseMove);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutReshapeFunc(reshape);

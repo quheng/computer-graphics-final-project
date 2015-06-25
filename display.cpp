@@ -15,7 +15,7 @@ extern bool fan ;		//control the fan
 extern bool bAnim;      //the flag of rotation
 extern bool bWire;      //the flag of rotation
 
-extern GLuint lamp, sofa, coffeeTable, settee;
+extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
 
 
 void display()
@@ -75,9 +75,9 @@ void display()
 	drawfan(fan);
 	glPopMatrix();
 
-	glEnable(GL_TEXTURE_2D);
+	
 	glPushMatrix();
-	glTranslatef(0.05f, 0, 0);
+	glTranslatef(0.05f, 0.5f, 2.0f);
 	glScalef(0.18f, 0.18f, 0.18f);
 	glCallList(lamp);
 	glPopMatrix();
@@ -85,26 +85,38 @@ void display()
 
 	glPushMatrix();
 	glTranslatef(0.05f, -0.01f, -0.03f);
-	glScalef(0.6f, 0.6f, 0.6f);
+	glScalef(0.6f, 0.6f, 1.5f);
 	glCallList(sofa);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.04f, -0.012f, 0);
+	glTranslatef(0.04f, -0.012f, 2.0f);
 	glScalef(0.5f, 0.5f, 0.5f);
 	glCallList(coffeeTable);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.0f, -0.01f, 0.0f);
+	glTranslatef(-1.5f, -0.01f, 2.0f);
 	glScalef(0.3f, 0.3f, 0.3f);
 	glCallList(settee);
 	glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
+	glPushMatrix();
+	glTranslatef(-1.5f, -0.01f, -0.03f);
+	glScalef(0.08f, 0.08f, 0.08f);
+	glCallList(sideTable1);
+	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.0f, -0.01f, 0.0f);
+	glTranslatef(-1.5f, -0.01f, 3.5f);
+	glScalef(0.08f, 0.08f, 0.08f);
+	glCallList(sideTable2);
+	glPopMatrix();
+
+	
+
+	glPushMatrix();
+	glTranslatef(0.0f, -0.01f, 4.0f);
 	drawAVI();
 	glPopMatrix();
 

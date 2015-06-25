@@ -2,13 +2,15 @@
 #include "GL/glut.h"
 #include "glm.h"
 #include "obj.h"
-extern GLuint lamp, sofa, coffeeTable, settee;
+extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
 
 void loadOBJ(){
 	lamp = drawOBJ("obj/Lamp/Lamp.obj");
-	//sofa = drawOBJ("obj/Sofa/Sofa.obj");
+	sofa = drawOBJ("obj/Sofa/Sofa.obj");
 	coffeeTable = drawOBJ("obj/CoffeeTable/CoffeeTable.obj");
-	//settee = drawOBJ("obj/Settee/Settee.obj");
+	settee = drawOBJ("obj/Settee/Settee.obj");
+	sideTable1 = drawOBJ("obj/SideTable1/SideTable1.obj");
+	sideTable2 = drawOBJ("obj/SideTable1/SideTable1.obj");
 }
 
 GLuint drawOBJ(char * filename){
