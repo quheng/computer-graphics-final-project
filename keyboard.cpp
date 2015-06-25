@@ -3,6 +3,7 @@
 #include <iostream>
 #include <GL\glut.h>
 #include "keyboard.h"
+#include "snapScreen.h"
 
 extern float phi;
 extern float angle;
@@ -86,6 +87,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'n':light_pos[1] -= 0.4f;break;
 	//down
 	case 'm':light_pos[1] += 0.4f;break;
+	case '0':snapScreen(640, 640,"snap/snap.bmp"); break;
 		/*
 	case '1':
 		direction[2] += 0.1;

@@ -75,13 +75,11 @@ void display()
 	drawfan(fan);
 	glPopMatrix();
 
-	
 	glPushMatrix();
 	glTranslatef(0.05f, 0.5f, 2.0f);
 	glScalef(0.18f, 0.18f, 0.18f);
 	glCallList(lamp);
 	glPopMatrix();
-
 
 	glPushMatrix();
 	glTranslatef(0.05f, -0.01f, -0.03f);
@@ -113,9 +111,11 @@ void display()
 	glCallList(sideTable2);
 	glPopMatrix();
 
-	
-
 	glPushMatrix();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
+	gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
+	gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
 	glTranslatef(0.0f, -0.01f, 4.0f);
 	drawAVI();
 	glPopMatrix();
