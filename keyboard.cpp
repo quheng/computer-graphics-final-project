@@ -9,12 +9,56 @@ extern float angle;
 extern float theta;
 extern bool bAnim, fan, bWire;
 extern float light_pos[4];
+extern float center[3], eye[3], dir[3],c,h,r;
 
-void orientMe(float ang);
-void moveMeFlat(int i);
+float eyeDeX;
+float eyeDeZ;
+
+void dir_w()  {
+	dir[0] = eye[0] - center[0];
+	dir[2] = eye[2] - center[2];
+	eye[0] -= eyeDeX;
+	eye[2] -= eyeDeZ;
+	center[0] = eye[0] - dir[0];
+	center[2] = eye[2] - dir[2];
+}
+
+void dir_s(){
+		//	printf("e0=%f,e2=%f\n", eye[0], eye[2]);
+		dir[0] = eye[0] - center[0];
+		dir[2] = eye[2] - center[2];
+		//  printf("d0=%f,d2=%f\n", dir[0], dir[2]);
+		eye[0] += eyeDeX;
+		eye[2] += eyeDeZ;
+		//  printf("e0=%f,e2=%f\n", eye[0], eye[2]);
+		center[0] = eye[0] - dir[0];
+		center[2] = eye[2] - dir[2];
+}
+void dir_d()  {
+	// angle = angle - 5;
+		dir[0] = center[0] - eye[0];
+		dir[2] = center[2] - eye[2];
+		//  printf("dir0=%f,dir2=%f\n", dir[0], dir[2]);
+		dir[0] = dir[0] * cos(c * 5) - dir[2] * sin(c * 5);
+		dir[2] = dir[0] * sin(c * 5) + dir[2] * cos(c * 5);
+		center[0] = eye[0] + dir[0];
+		center[2] = eye[2] + dir[2];
+}
+void dir_a(){
+	//   angle = angle + 5;
+		dir[0] = center[0] - eye[0];
+		dir[2] = center[2] - eye[2];
+		//  printf("dir0=%f,dir2=%f\n", dir[0], dir[2]);
+		dir[0] = dir[0] * cos(c*(-5)) - dir[2] * sin(c*(-5));
+		dir[2] = dir[0] * sin(c*(-5)) + dir[2] * cos(c*(-5));
+		center[0] = eye[0] + dir[0];
+		center[2] = eye[2] + dir[2];
+}
 
 void keyboard(unsigned char key, int x, int y)
 {
+	eyeDeX = 0.5*(eye[0] - center[0]) / 3;
+	eyeDeZ = 0.5*(eye[2] - center[2]) / 3;
 	switch (key)
 	{
 	case 'o': {bWire = !bWire; break; }
@@ -24,10 +68,10 @@ void keyboard(unsigned char key, int x, int y)
 	case ' ':bAnim = !bAnim;break;
 
 	case 'f': fan = !fan;
-	case 'a': angle -= 0.01f; orientMe(angle); break;
-	case 'd': angle += 0.01f; orientMe(angle); break;
-	case 'w': moveMeFlat(1); break;
-	case 's': moveMeFlat(-1); break;
+	case 'a': dir_a(); break;
+	case 'd': dir_d(); break;
+	case 'w': dir_w(); break;
+	case 's': dir_s(); break;
 
 	//light
 	//forward
@@ -42,6 +86,43 @@ void keyboard(unsigned char key, int x, int y)
 	case 'n':light_pos[1] -= 0.4f;break;
 	//down
 	case 'm':light_pos[1] += 0.4f;break;
+		/*
+	case '1':
+		direction[2] += 0.1;
+		break;
+	case '2':{
+		direction[2] -= 0.1;
+		break;
+	}
+	case '3':{
+		direction[0] -= 0.1;
+		break;
+	}
+	case '4':{
+		direction[0] += 0.1;
+		break;
+	}
+	case '5':{
+		direction[1] -= 0.1;
+		break;
+	}
+	case '6':{
+		direction[1] += 0.1;
+		break;
+	}
+	case '7':{
+		degree += 1;
+		break;
+	}
+	case '8':{
+		degree -= 1;
+		break;
+	}
+	case '9':{
+		blight = !blight;
+		break;
+	}
+	*/
 	};
 }
 

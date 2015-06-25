@@ -14,11 +14,15 @@
 
 using namespace std;
 
+float direction[] = { 0, 0, 0 };//direction of spot light
+float degree = 10;//degree of spot light
+float pos[] = { 0, 0, 0, 1 };
 
-float angle = 0.0, ratio;
-float view_x = 0.0f, view_y = 0.0, view_z = 1.0f;
-float lx = 0, ly = 0, lz = 0;
+float center[3] = { 0, 0, 8 }, eye[3] = { 0, 0, -7 }, dir[3] = {0,0,0};
+float lx = 0, ly = 0, lz = -7;
 float fRotate = 20.0f;
+
+float oldmx = 0, oldmy = 0, h = 0, r = 1, c = G_PI / 180, du = 0;    //mouse
 bool fan = true;		//control the fan
 bool bAnim = false;      //the flag of rotation
 bool bWire = false;
@@ -32,6 +36,8 @@ void initGL();   //initialization
 void idle();                           //use the function to do display repeatly        
 void reshape(int width, int height);
 GLuint drawOBJ(char * filename);      //load the obj model 
+void Mouse(int button, int state, int x, int y);
+void onMouseMove(int x, int y);
 
 void main()
 {
@@ -39,6 +45,8 @@ void main()
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("final");
 	initGL();
+	glutMouseFunc(Mouse);
+	glutMotionFunc(onMouseMove);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutReshapeFunc(reshape);
@@ -79,4 +87,20 @@ void idle()
 {
 	glutPostRedisplay();
 }
+void Mouse(int button, int state, int x, int y)  {
+	// record initial coordinate when the mouse clicked fistly
+	if (state == GLUT_DOWN)
+		oldmx = x,
+		oldmy = y;
+}
 
+void onMouseMove(int x, int y) {
+	du += x - oldmx; //鼠标在窗口x轴方向上的增量加到视点绕y轴的角度上，这样就左右转了
+	eye[0] = center[0] + r*cos(c*du);
+	eye[2] = center[2] + r*sin(c*du);
+	h += 0.03f*(y - oldmy); //鼠标在窗口y轴方向上的改变加到视点的y坐标上，就上下转了
+	if (h>1.0f) h = 1.0f; //视点y坐标作一些限制，不会使视点太奇怪
+	else if (h<-1.0f) h = -1.0f;
+	eye[1] = h;
+	oldmx = x, oldmy = y; //把此时的鼠标坐标作为旧值，为下一次计算增量做准备
+}

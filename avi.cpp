@@ -117,9 +117,7 @@ void GrabAVIFrame(int frame)									// Grabs A Frame From The Stream
 
 	// Convert Data To Requested Bitmap Format
 	DrawDibDraw(hdd, hdc, 0, 0, 256, 256, lpbi, pdata, 0, 0, width, height, 0);
-
 	flipIt(data);												// Swap The Red And Blue Bytes (GL Compatability)
-
 	// Update The Texture
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256, GL_RGB, GL_UNSIGNED_BYTE, data);
 }
@@ -140,10 +138,8 @@ void Deinitialize(void)										// Any User DeInitialization Goes Here
 
 void Update(DWORD milliseconds)								// Perform Motion Updates Here
 {
-
 	nextframe += milliseconds;											// Increase next Based On The Timer
 	frame = nextframe / mpf;												// Calculate The Current Frame
-
 	if (frame >= lastframe)										// Are We At Or Past The Last Frame?
 	{
 		frame = 0;												// Reset The Frame Back To Zero (Start Of Video)
@@ -156,7 +152,9 @@ void drawAVI(void)												// Draw Our Scene
 	tickCount = GetTickCount();				// Get The Tick Count
 	Update(tickCount - lastTickCount);	// Update The Counter
 	lastTickCount = tickCount;
-	GrabAVIFrame(frame);										// Grab A Frame From The AVI
+	GrabAVIFrame(frame);	
+	glEnable(GL_TEXTURE_2D);
+	// Grab A Frame From The AVI
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glTranslatef(0.0f, 0.0f, -2.0f);							// Translate 10 Units Into The Screen
 	glBegin(GL_QUADS);											// Begin Drawing A Cube
@@ -176,7 +174,9 @@ void drawAVI(void)												// Draw Our Scene
 	glNormal3f(0.5f, 0.0f, 0.0f);
 	// Left Face
 	glNormal3f(-0.5f, 0.0f, 0.0f);
-	glEnd();												// Done Drawing Our Cube
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	// Done Drawing Our Cube
 }
 
 void initAVI()					// Any GL Init Code & User Initialiazation Goes Here
