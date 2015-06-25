@@ -14,6 +14,7 @@ extern float light_pos[4];
 extern bool fan ;		//control the fan
 extern bool bAnim;      //the flag of rotation
 extern bool bWire;      //the flag of rotation
+extern unsigned int texture[3];
 
 extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
 
@@ -59,11 +60,10 @@ void display()
 	}
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
-	GLfloat white[] = { 1,1, 0.01, 0.01 };
+	GLfloat white[] = { 1,1, 1, 1 };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
 	glEnable(GL_LIGHT0);
 
-	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 	glPushMatrix();
 	if (bAnim)
 		fRotate += 0.5f;
@@ -75,17 +75,23 @@ void display()
 	drawfan(fan);
 	glPopMatrix();
 
+
 	glPushMatrix();
 	glTranslatef(0.05f, 0.5f, 2.0f);
 	glScalef(0.18f, 0.18f, 0.18f);
 	glCallList(lamp);
 	glPopMatrix();
 
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_3D);
 	glPushMatrix();
 	glTranslatef(0.05f, -0.01f, -0.03f);
 	glScalef(0.6f, 0.6f, 1.5f);
 	glCallList(sofa);
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_3D);
+
 
 	glPushMatrix();
 	glTranslatef(0.04f, -0.012f, 2.0f);
