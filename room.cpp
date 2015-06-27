@@ -32,8 +32,10 @@ GLuint load_texture(const char* file_name)
 	// 打开文件，如果失败，返回 
 	FILE * pFile;
 	fopen_s(&pFile,file_name, "rb");
-	if (pFile == 0)
+	if (pFile == 0){
+		printf_s("load file failed");
 		return 0;
+	}
 	// 读取文件中图象的宽度和高度  
 	fseek(pFile, 0x0012, SEEK_SET);
 	fread(&width, 4, 1, pFile);
@@ -85,8 +87,8 @@ GLuint load_texture(const char* file_name)
 }
 /********************************** 定 义 各 个 纹 理 对 象 的 名 称
 ************************************/
-GLuint texblackboard, texwindow, texdesk, texsound;
-GLuint texceiling, texdoor, texfloor, texbackwall, texpole;
+extern GLuint texblackboard, texwindow, texdesk, texsound;
+extern GLuint texceiling, texdoor, texfloor, texbackwall, texpole;
 GLuint texairfro, texairback, texgaodi, texsdesk, texclock;
 /*******************************	绘	制	相	关	函	数
 **************************************************/
@@ -154,7 +156,7 @@ void drawscence()
 		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(-10, 0, 6);   	 	glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(-10, 5, 6);   	 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-10, 5, -6);		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-10, 5, -6);			glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(-10, 0, -6);
 		glEnd();
 	
@@ -167,7 +169,7 @@ void drawscence()
 	glBegin(GL_QUADS);         
 	glNormal3f(0.0f, 0.0f, 1.0f); //用于定义法线向量 
 	glTexCoord2f(0.0f, 0.0f);  	 	
-	glVertex3f(-10.0f, 0.0f, 6.0f); glTexCoord2f(0.0f, 1.0f);  	 	
+	glVertex3f(-10.0f, 0.0f, 6.0f);			glTexCoord2f(0.0f, 1.0f);  	 	
 	glVertex3f(-10.0f, 5.0f, 6.0f);   	 	glTexCoord2f(1.0f, 1.0f);  	 	
 	glVertex3f(10.0f, 5.0f, 6.0f);   	 	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(10.0f, 0.0f, 6.0f);  	 	

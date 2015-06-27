@@ -1,6 +1,6 @@
 ﻿#include <windows.h>											// Header File For Windows
-#include "gl/glew.h"
-#include "gl/glut.h"
+#include <GL/glew.h>
+#include "GL/glut.h"
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
@@ -11,20 +11,17 @@
 #include "avi.h"
 #include "room.h"
 
+
+#define BITMAP_ID 0x4D42
 #define	G_PI 3.14159265358979323846f
 
 using namespace std;
-
-extern GLuint texbackwall;
-extern GLuint texwindow;
-extern GLuint texdoor;
-extern GLuint texceiling;
 
 float direction[] = { 0, 0, 0 };//direction of spot light
 float degree = 10;//degree of spot light
 float pos[] = { 0, 0, 0, 1 };
 
-float center[3] = { 0, 1.5, 8 }, eye[3] = { 0, 1.5, -7 }, dir[3] = { 0, 0, 0 };
+float center[3] = { 0, 1.5, 8 }, eye[3] = { 0, 1.5, -7 }, dir[3] = {0,0,0};
 float fRotate = 0.0f;
 
 float oldmx = 0, oldmy = 0, h = 1.5, r = 15, c = G_PI / 180, du = -90;    //mouse
@@ -35,11 +32,10 @@ bool bWire = false;
 float light_pos[4] = { 0, 0, 1, 1 };   //position of light
 /*obj model*/
 GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
+unsigned int texture[3];
 
-////
-
-////
-
+//room
+GLuint texbackwall,texwindow, texdoor, texceiling;
 
 /*declaration of function*/
 void initGL();   //initialization
@@ -55,22 +51,20 @@ void main()
 	glutInitWindowSize(640, 640);
 	glutCreateWindow("final");
 	initGL();
-
 	glutMouseFunc(Mouse);
 	glutMotionFunc(onMouseMove);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
-
-	//修改 by侯天朗
+	glutMainLoop();
+}
+void initGL(){
 	texbackwall = load_texture("b.bmp");
 	texwindow = load_texture("window.bmp");
 	texdoor = load_texture("door.bmp");
 	texceiling = load_texture("ceiling.bmp");
-	glutMainLoop();
-}
-void initGL(){
+
 	initAVI();
 	loadOBJ();
 }
