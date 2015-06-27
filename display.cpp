@@ -1,10 +1,11 @@
-﻿#include <GL/glew.h>
-#include "GL/glut.h"
+﻿#include "gl/glew.h"
+#include "gl/glut.h"
 #include "glm.h"
 #include <math.h>
 #include "display.h"
 #include "fan.h"
 #include "avi.h"
+#include "room.h"
 
 
 extern float direction[], pos[], degree;
@@ -14,7 +15,6 @@ extern float light_pos[4];
 extern bool fan ;		//control the fan
 extern bool bAnim;      //the flag of rotation
 extern bool bWire;      //the flag of rotation
-extern unsigned int texture[3];
 
 extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
 
@@ -60,9 +60,11 @@ void display()
 	}
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
-	GLfloat white[] = { 1,1, 1, 1 };
+	GLfloat white[] = { 1,1, 0.01, 0.01 };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
 	glEnable(GL_LIGHT0);
+
+	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
 	glPushMatrix();
 	if (bAnim)
@@ -70,11 +72,23 @@ void display()
 	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
 
 	glPushMatrix();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
+	gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
+	gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
+	glTranslatef(0.0f, -0.01f, 4.0f);
+	drawAVI();
+	glPopMatrix();
+
+	glPushMatrix();
+	drawscence();//  wall
+	glPopMatrix();
+
+	glPushMatrix();
 	glTranslatef(0.05f, 1.0, 1.0f);
 	glScalef(0.18f, 0.18f, 0.18f);
 	drawfan(fan);
 	glPopMatrix();
-
 
 	glPushMatrix();
 	glTranslatef(0.05f, 0.5f, 2.0f);
@@ -82,16 +96,12 @@ void display()
 	glCallList(lamp);
 	glPopMatrix();
 
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_3D);
 	glPushMatrix();
 	glTranslatef(0.05f, -0.01f, -0.03f);
 	glScalef(0.6f, 0.6f, 1.5f);
 	glCallList(sofa);
+	
 	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_3D);
-
 
 	glPushMatrix();
 	glTranslatef(0.04f, -0.012f, 2.0f);
@@ -115,15 +125,6 @@ void display()
 	glTranslatef(-1.5f, -0.01f, 3.5f);
 	glScalef(0.08f, 0.08f, 0.08f);
 	glCallList(sideTable2);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
-	gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
-	gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
-	glTranslatef(0.0f, -0.01f, 4.0f);
-	drawAVI();
 	glPopMatrix();
 
 	glPopMatrix();
