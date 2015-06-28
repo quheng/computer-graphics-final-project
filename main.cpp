@@ -31,11 +31,13 @@ bool bWire = false;
 
 float light_pos[4] = { 0, 0, 1, 1 };   //position of light
 /*obj model*/
-GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
-unsigned int texture[3];
+GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2,tv;
 
 //room
 GLuint texbackwall,texwindow, texdoor, texceiling;
+
+//nurbs
+GLUnurbsObj *theNurb1;
 
 /*declaration of function*/
 void initGL();   //initialization
@@ -60,11 +62,15 @@ void main()
 	glutMainLoop();
 }
 void initGL(){
+	//wall
 	texbackwall = load_texture("b.bmp");
 	texwindow = load_texture("window.bmp");
 	texdoor = load_texture("door.bmp");
 	texceiling = load_texture("ceiling.bmp");
 
+	theNurb1 = gluNewNurbsRenderer();
+	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb1, GLU_DISPLAY_MODE, GLU_FILL);
 	initAVI();
 	loadOBJ();
 }

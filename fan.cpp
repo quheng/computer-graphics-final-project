@@ -8,11 +8,11 @@ void drawfan(bool rot){
 	glPushMatrix();
 	glColor3f(0.7, 0.7, 0.7);
 	glTranslatef(0, 1, 0);
-	glScalef(0.1,0.03,0.1);
+	glScalef(0.1, 0.03, 0.1);
 	gluSphere(gluNewQuadric(), 2, 20, 20);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, light_diffuse);
 	glPopMatrix();
-	
+
 	//fan blade
 	glPushMatrix();
 	glColor3f(0.7, 0.7, 0.7);
@@ -28,7 +28,7 @@ void drawfan(bool rot){
 	glTranslatef(0, 1, 0);
 	glScalef(0.1, 0.005, 0.1);
 	glRotated(fantheta, 0, 1, 0);
-	gluCylinder(gluNewQuadric(), 1,3, 10,20, 20);
+	gluCylinder(gluNewQuadric(), 1, 3, 10, 20, 20);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, light_diffuse);
 	glPopMatrix();
 

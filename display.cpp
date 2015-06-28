@@ -1,5 +1,6 @@
 ﻿#include <GL/glew.h>
 #include "GL/glut.h"
+#include <stdio.h>
 #include "glm.h"
 #include <math.h>
 #include "display.h"
@@ -18,8 +19,21 @@ extern bool bAnim;      //the flag of rotation
 extern bool bWire;      //the flag of rotation
 extern unsigned int texture[3];
 
-extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2;
+extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2,tv;
 
+
+GLfloat ctrlpoints[5][5][3] =
+{
+	{ { -3, 0.5, 0 }, { -1, 1.5, 0 }, { -2, 2, 0 }, { 1, -1, 0 }, { -5, 0, 0 } },
+	{ { -3, 0.5, -1 }, { -1, 1.5, -1 }, { -2, 2, -1 }, { 1, -1, -1 }, { -5, 0, -1 } },
+	{ { -3, 0.5, -2 }, { -1, 1.5, -2 }, { -2, 2, -2 }, { 1, -1, -2 }, { -5, 0, -2 } },
+	{ { -3, 0.5, -3 }, { -1, 1.5, -3 }, { -2, 2, -3 }, { 1, -1, -3 }, { -5, 0, -3 } },
+	{ { -3, 0.5, -4 }, { -1, 1.5, -4 }, { -2, 2, -4 }, { 1, -1, -4 }, { -5, 0, -4 } }
+};
+
+GLfloat knots[10] = { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+int nurbs = 1;
+extern GLUnurbsObj *theNurb1;
 
 void display()
 {
@@ -51,7 +65,7 @@ void display()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, 1, 0.1f, 1000.0f);
+	gluPerspective(47.0f, 1, 0.1f, 1000.0f);
 	gluLookAt(eye[0], eye[1], eye[2], center[0], center[1], center[2], 0, 1, 0);
 
 	if (bWire) {
@@ -78,33 +92,83 @@ void display()
 	drawscence();   //wall
 	glPopMatrix();
 
+	glPushMatrix();
+		for (int i = 0; i < 5; i++)
+		{
+			printf_s("%f\n",ctrlpoints[i][0][0]);
+			if (nurbs){
+				ctrlpoints[i][0][0] += 0.01;
+				if (ctrlpoints[i][0][0] > 3.0)
+					nurbs = 0;
+			}
+			else{
+				ctrlpoints[i][0][0] -= 0.01;
+				if (ctrlpoints[i][0][0] < -3.0)
+					nurbs = 1;
+			}
+		}
+		glTranslatef(0.2, 0.04, 2.0);
+		glScalef(0.05, 0.05, 0.05);
+		gluBeginSurface(theNurb1);
+		gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+		gluEndSurface(theNurb1);
+	glPopMatrix();
+
 
 	glPushMatrix();
-	glTranslatef(0.05f, 0.8f, 1.0f);
+	glTranslatef(0.05f, 1.2f, 1.0f);
 	glScalef(0.7f, 0.7f, 0.7f);
 	drawfan(fan);
 	glPopMatrix();
 
-
+	glPushMatrix();    //tv and tv table
+		glRotatef(180, 0, 1.0f, 0);
+		glTranslatef(0.0f, 0.1f, -4.0f);
+		glPushMatrix();
+			glTranslatef(0.0f, -0.3f, 0.0f);
+			glScalef(2.0f, 0.4f, 0.8f);
+			glColor3f(1.0, 0.4, 0.6);
+			glutSolidCube(1.0);
+			glRotatef(180, 0, 1.0f, 0);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0.2f, 0.4f, 0.0f);
+			glScalef(0.18f, 0.18f, 0.18f);
+			glCallList(tv);
+		glPopMatrix();
+		glPushMatrix();
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
+			gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
+			gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
+			glTranslatef(-0.025f, 0.5f, 0.05f);
+			glScalef(0.65f, 0.35f, 0.0f);
+			drawAVI();
+		glPopMatrix();
+	glPopMatrix();
+	
 	glPushMatrix();
-	glTranslatef(0.05f, 0.5f, 2.0f);
-	glScalef(0.18f, 0.18f, 0.18f);
-	glCallList(lamp);
+		glTranslatef(-0.1f, 0.0f, 0.0f);
+		glPushMatrix();
+			glTranslatef(-1.5f, 0.45f, -0.05f);
+			glScalef(0.18f, 0.18f, 0.18f);
+			glCallList(lamp);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-1.5f, -0.12f, -0.03f);
+			glScalef(0.08f, 0.08f, 0.08f);
+			glCallList(sideTable1);
+		glPopMatrix();
 	glPopMatrix();
 
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_3D);
 	glPushMatrix();
 	glTranslatef(0.05f, -0.01f, -0.03f);
 	glScalef(0.6f, 0.6f, 1.5f);
 	glCallList(sofa);
 	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_3D);
-
 
 	glPushMatrix();
-	glTranslatef(0.04f, -0.012f, 2.0f);
+	glTranslatef(0.04f, -0.19f, 2.0f);
 	glScalef(0.5f, 0.5f, 0.5f);
 	glCallList(coffeeTable);
 	glPopMatrix();
@@ -116,24 +180,9 @@ void display()
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-1.5f, -0.01f, -0.03f);
-	glScalef(0.08f, 0.08f, 0.08f);
-	glCallList(sideTable1);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.5f, -0.01f, 3.5f);
+	glTranslatef(-1.5f, -0.12f, 3.5f);
 	glScalef(0.08f, 0.08f, 0.08f);
 	glCallList(sideTable2);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
-	gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
-	gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
-	glTranslatef(0.0f, -0.01f, 4.0f);
-	drawAVI();
 	glPopMatrix();
 
 	glPopMatrix();

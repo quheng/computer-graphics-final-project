@@ -152,7 +152,7 @@ void drawAVI(void)												// Draw Our Scene
 	tickCount = GetTickCount();				// Get The Tick Count
 	Update(tickCount - lastTickCount);	// Update The Counter
 	lastTickCount = tickCount;
-	GrabAVIFrame(frame);	
+	GrabAVIFrame(frame);
 	glEnable(GL_TEXTURE_2D);
 	// Grab A Frame From The AVI
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

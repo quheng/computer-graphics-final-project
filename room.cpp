@@ -93,7 +93,6 @@ GLuint texairfro, texairback, texgaodi, texsdesk, texclock;
 /*******************************	绘	制	相	关	函	数
 **************************************************/
 
-//绘制教室这个大场景 
 void drawscence()
 {
 	//设置材质相关参数 
@@ -110,10 +109,10 @@ void drawscence()
 	glColor3f(0.8f, 1.0f, 0.8f);
 	glBegin(GL_QUADS);
 	glNormal3f(0.0f, 1.0f, 0.0f);                   //用于定义法线向量  	
-	glVertex3f(-10.0f, -0.0f, 6.0f);
-	glVertex3f(-10.0f, -0.0f, -6.0f);
-	glVertex3f(10.0f, -0.0f, -6.0f);
-	glVertex3f(10.0f, -0.0f, 6.0f);
+	glVertex3f(-7.0f, -0.0f, 12.0f);
+	glVertex3f(-7.0f, -0.0f, -12.0f);
+	glVertex3f(7.0f, -0.0f, -12.0f);
+	glVertex3f(7.0f, -0.0f, 12.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
@@ -123,10 +122,10 @@ void drawscence()
 	glColor3f(0.8f, 1.0f, 0.8f);
 	glBegin(GL_QUADS);
 	glNormal3f(0.0f, 1.0f, 0.0f);                   //用于定义法线向量  	
-	glVertex3f(-10.0f, 5.0f, 6.0f);
-	glVertex3f(-10.0f, 5.0f, -6.0f);
-	glVertex3f(10.0f, 5.0f, -6.0f);
-	glVertex3f(10.0f, 5.0f, 6.0f);
+	glVertex3f(-7.0f, 7.0f, 12.0f);
+	glVertex3f(-7.0f, 7.0f, -12.0f);
+	glVertex3f(7.0f, 7.0f, -12.0f);
+	glVertex3f(7.0f, 7.0f, 12.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
@@ -134,45 +133,50 @@ void drawscence()
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texwindow);
+	glPushMatrix();
+	glTranslatef(-3.0f, 0.0f, 0.0f);
 	for (int n = 0; n <= 1; n++)
 	{
 		glBegin(GL_QUADS);
 		glNormal3f(1.0, 0.0f, 0.0f);                   //用于定义法线向	量
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(10, 0, 0 + n * 6);   	 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(10, 5, 0 + n * 6);   	 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(10, 5, -6 + n * 6);		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(10, 0, -6 + n * 6);
+		glVertex3f(10, 0, 0 + n * 12.0f);   	 			glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(10, 7.0f, 0 + n * 12.0f);   	 			glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(10, 7.0f, -12.0f + n * 12.0f);			glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(10, 0, -12.0f + n * 12.0f);
 		glEnd();
 	}
+	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
 	//绘制右边墙加门 
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texdoor);
+	glPushMatrix();
+		glTranslatef(3.0f, 0.0f, 0.0f);
 		glBegin(GL_QUADS);
 		glNormal3f(1.0, 0.0f, 0.0f);                   //用于定义法线向	量
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(-10, 0, 6);   	 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(-10, 5, 6);   	 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-10, 5, -6);			glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-10, 0, -6);
+		glVertex3f(-10, 0, 12.0f);   	 	glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-10, 7.0f, 12.0f);   	 	glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-10, 7.0f, -12.0f);			glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-10, 0, -12.0f);
 		glEnd();
-	
+	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
 	//后墙
 	glEnable(GL_TEXTURE_2D);  	 	
 	glBindTexture(GL_TEXTURE_2D, texbackwall);         
-	glColor3f(0.8f, 0.8f, 0.8f);         
+	glColor3f(1.0f, 1.0f, 1.0f);         
 	glBegin(GL_QUADS);         
 	glNormal3f(0.0f, 0.0f, 1.0f); //用于定义法线向量 
 	glTexCoord2f(0.0f, 0.0f);  	 	
-	glVertex3f(-10.0f, 0.0f, 6.0f);			glTexCoord2f(0.0f, 1.0f);  	 	
-	glVertex3f(-10.0f, 5.0f, 6.0f);   	 	glTexCoord2f(1.0f, 1.0f);  	 	
-	glVertex3f(10.0f, 5.0f, 6.0f);   	 	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(10.0f, 0.0f, 6.0f);  	 	
+	glVertex3f(-7.0f, 0.0f, 12.0f);			glTexCoord2f(0.0f, 1.0f);  	 	
+	glVertex3f(-7.0f, 7.0f, 12.0f);   	 	glTexCoord2f(1.0f, 1.0f);  	 	
+	glVertex3f(7.0f, 7.0f, 12.0f);   	 	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(7.0f, 0.0f, 12.0f);  	 	
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	

@@ -18,8 +18,8 @@ float eyeDeZ;
 void dir_w()  {
 	dir[0] = eye[0] - center[0];
 	dir[2] = eye[2] - center[2];
-	eye[0] -= eyeDeX * 0.2;
-	eye[2] -= eyeDeZ * 0.2;
+	eye[0] -= eyeDeX * 0.3;
+	eye[2] -= eyeDeZ * 0.3;
 	center[0] = eye[0] - dir[0];
 	center[2] = eye[2] - dir[2];
 }
@@ -27,8 +27,8 @@ void dir_w()  {
 void dir_s(){
 		dir[0] = eye[0] - center[0];
 		dir[2] = eye[2] - center[2];
-		eye[0] += eyeDeX *0.2;
-		eye[2] += eyeDeZ *0.2;
+		eye[0] += eyeDeX *0.3;
+		eye[2] += eyeDeZ *0.3;
 		center[0] = eye[0] - dir[0];
 		center[2] = eye[2] - dir[2];
 }
