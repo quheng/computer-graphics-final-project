@@ -28,13 +28,16 @@ float oldmx = 0, oldmy = 0, h = 1.5, r = 15, c = G_PI / 180, du = -90;    //mous
 bool fan = true;		//control the fan
 bool bAnim = false;      //the flag of rotation
 bool bWire = false;
+bool color = true;		//control the color of light
+bool spot = false;		//control the color of spot
 
-float light_pos[4] = { 0, 0, 1, 1 };   //position of light
+float light_pos[4] = { 0, 0, 0, 1 };   //position of light
+
 /*obj model*/
 GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2,tv;
 
 //room
-GLuint texbackwall,texwindow, texdoor, texceiling;
+GLuint texbackwall, texwindow, texdoor, texceiling, texpole;
 
 //nurbs
 GLUnurbsObj *theNurb1;

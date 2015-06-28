@@ -1,4 +1,5 @@
-﻿#include <GL/glew.h>
+﻿#include <iostream>
+#include <GL/glew.h>
 #include "GL/glut.h"
 #include <stdio.h>
 #include "glm.h"
@@ -8,7 +9,7 @@
 #include "avi.h"
 #include "room.h"
 
-
+using namespace std;
 
 extern float direction[], pos[], degree;
 extern float center[3], eye[3];
@@ -17,6 +18,9 @@ extern float light_pos[4];
 extern bool fan ;		//control the fan
 extern bool bAnim;      //the flag of rotation
 extern bool bWire;      //the flag of rotation
+extern bool color;      //the color of light
+extern bool spot;      //the flag of spot
+
 extern unsigned int texture[3];
 
 extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2,tv;
@@ -61,7 +65,6 @@ void display()
 		glMatrixMode(GL_MODELVIEW);
 	}
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -77,8 +80,14 @@ void display()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	GLfloat white[] = { 1,1, 1, 1 };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, white);
+	GLfloat yellow[] = { 0.1, 0.1, 0.4, 1 };
+	if (color)
+		glLightfv(GL_LIGHT0, GL_AMBIENT, white);
+	else
+		glLightfv(GL_LIGHT0, GL_AMBIENT, yellow);
 	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
 
 	glPushMatrix();
 	if (bAnim)
@@ -107,8 +116,8 @@ void display()
 					nurbs = 1;
 			}
 		}
-		glTranslatef(0.2, 0.04, 2.0);
-		glScalef(0.05, 0.05, 0.05);
+		glTranslatef(0.2, 0.045, 2.0);
+		glScalef(0.1, 0.1, 0.1);
 		gluBeginSurface(theNurb1);
 		gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
 		gluEndSurface(theNurb1);

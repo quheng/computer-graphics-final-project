@@ -1,4 +1,4 @@
-#include "gl/glut.h" 
+ï»¿#include "gl/glut.h" 
 #include <windows.h> 
 #include <math.h> 
 #include <stdio.h> 
@@ -15,45 +15,45 @@ GLint 	WinHeight;
 
 
 
-/**************************** ÔØ Èë Î» Í¼ ×÷ Îª ÎÆ Àí µÄ Ïà ¹Ø º¯ Êı
+/**************************** è½½ å…¥ ä½ å›¾ ä½œ ä¸º çº¹ ç† çš„ ç›¸ å…³ å‡½ æ•°
 ************************************/ 
 #define BMP_Header_Length 54 
 
 
 
-/****************************ÔØÈëÒ»¸±Î»Í¼×÷ÎªÎÆÀí£¬·µ»ØµÄÊÇÎÆÀí±à
-ºÅ**********************************************/
+/****************************è½½å…¥ä¸€å‰¯ä½å›¾ä½œä¸ºçº¹ç†ï¼Œè¿”å›çš„æ˜¯çº¹ç†ç¼–
+å·**********************************************/
 GLuint load_texture(const char* file_name)
 {
 	GLint width, height, total_bytes;
 	GLubyte* pixels = 0;
 	GLint last_texture_ID = 0;
 	GLuint texture_ID = 0;
-	// ´ò¿ªÎÄ¼ş£¬Èç¹ûÊ§°Ü£¬·µ»Ø 
+	// æ‰“å¼€æ–‡ä»¶ï¼Œå¦‚æœå¤±è´¥ï¼Œè¿”å› 
 	FILE * pFile;
 	fopen_s(&pFile,file_name, "rb");
 	if (pFile == 0){
 		printf_s("load file failed");
 		return 0;
 	}
-	// ¶ÁÈ¡ÎÄ¼şÖĞÍ¼ÏóµÄ¿í¶ÈºÍ¸ß¶È  
+	// è¯»å–æ–‡ä»¶ä¸­å›¾è±¡çš„å®½åº¦å’Œé«˜åº¦  
 	fseek(pFile, 0x0012, SEEK_SET);
 	fread(&width, 4, 1, pFile);
 	fread(&height, 4, 1, pFile);
 	fseek(pFile, BMP_Header_Length, SEEK_SET);
-	// ¼ÆËãÃ¿ĞĞÏñËØËùÕ¼×Ö½ÚÊı£¬²¢¸ù¾İ´ËÊı¾İ¼ÆËã×ÜÏñËØ×Ö½ÚÊı 
+	// è®¡ç®—æ¯è¡Œåƒç´ æ‰€å å­—èŠ‚æ•°ï¼Œå¹¶æ ¹æ®æ­¤æ•°æ®è®¡ç®—æ€»åƒç´ å­—èŠ‚æ•° 
 	{
 		GLint line_bytes = width * 3;
 		while (line_bytes % 4 != 0)
 			++line_bytes;
 		total_bytes = line_bytes * height;
 	}
-	// ¸ù¾İ×ÜÏñËØ×Ö½ÚÊı·ÖÅäÄÚ´æ 
+	// æ ¹æ®æ€»åƒç´ å­—èŠ‚æ•°åˆ†é…å†…å­˜ 
 	pixels = (GLubyte*)malloc(total_bytes);  	if (pixels == 0)
 	{
 		fclose(pFile);  	 	return 0;
 	}
-	// ¶ÁÈ¡ÏñËØÊı¾İ 
+	// è¯»å–åƒç´ æ•°æ® 
 	if (fread(pixels, total_bytes, 1, pFile) <= 0)
 	{
 		free(pixels);   	 	
@@ -61,7 +61,7 @@ GLuint load_texture(const char* file_name)
 		return 0;
 	}
 
-	// ·ÖÅäÒ»¸öĞÂµÄÎÆÀí±àºÅ 
+	// åˆ†é…ä¸€ä¸ªæ–°çš„çº¹ç†ç¼–å· 
 	glGenTextures(1, &texture_ID);  	 	
 	if (texture_ID == 0)
 	{
@@ -69,8 +69,8 @@ GLuint load_texture(const char* file_name)
 		fclose(pFile);
 		return 0;
 	}
-	// °ó¶¨ĞÂµÄÎÆÀí£¬ÔØÈëÎÆÀí²¢ÉèÖÃÎÆÀí²ÎÊı 
-	// ÔÚ°ó¶¨Ç°£¬ÏÈ»ñµÃÔ­À´°ó¶¨µÄÎÆÀí±àºÅ£¬ÒÔ±ãÔÚ×îºó½øĞĞ»Ö¸´   
+	// ç»‘å®šæ–°çš„çº¹ç†ï¼Œè½½å…¥çº¹ç†å¹¶è®¾ç½®çº¹ç†å‚æ•° 
+	// åœ¨ç»‘å®šå‰ï¼Œå…ˆè·å¾—åŸæ¥ç»‘å®šçš„çº¹ç†ç¼–å·ï¼Œä»¥ä¾¿åœ¨æœ€åè¿›è¡Œæ¢å¤   
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture_ID);
 	glBindTexture(GL_TEXTURE_2D, texture_ID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -80,22 +80,22 @@ GLuint load_texture(const char* file_name)
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
 	glBindTexture(GL_TEXTURE_2D, last_texture_ID);
-	// Ö®Ç°Îª pixels ·ÖÅäµÄÄÚ´æ¿ÉÔÚÊ¹ÓÃ glTexImage2D ÒÔºóÊÍ·Å 
-	// ÒòÎª´ËÊ±ÏñËØÊı¾İÒÑ¾­±» OpenGL ÁíĞĞ±£´æÁËÒ»·İ£¨¿ÉÄÜ±»±£´æµ½×¨ÃÅµÄÍ¼ĞÎÓ²¼şÖĞ£© 
+	// ä¹‹å‰ä¸º pixels åˆ†é…çš„å†…å­˜å¯åœ¨ä½¿ç”¨ glTexImage2D ä»¥åé‡Šæ”¾ 
+	// å› ä¸ºæ­¤æ—¶åƒç´ æ•°æ®å·²ç»è¢« OpenGL å¦è¡Œä¿å­˜äº†ä¸€ä»½ï¼ˆå¯èƒ½è¢«ä¿å­˜åˆ°ä¸“é—¨çš„å›¾å½¢ç¡¬ä»¶ä¸­ï¼‰ 
 	free(pixels);
 	return texture_ID;
 }
-/********************************** ¶¨ Òå ¸÷ ¸ö ÎÆ Àí ¶Ô Ïó µÄ Ãû ³Æ
+/********************************** å®š ä¹‰ å„ ä¸ª çº¹ ç† å¯¹ è±¡ çš„ å ç§°
 ************************************/
 extern GLuint texblackboard, texwindow, texdesk, texsound;
 extern GLuint texceiling, texdoor, texfloor, texbackwall, texpole;
 GLuint texairfro, texairback, texgaodi, texsdesk, texclock;
-/*******************************	»æ	ÖÆ	Ïà	¹Ø	º¯	Êı
+/*******************************	ç»˜	åˆ¶	ç›¸	å…³	å‡½	æ•°
 **************************************************/
 
 void drawscence()
 {
-	//ÉèÖÃ²ÄÖÊÏà¹Ø²ÎÊı 
+	//è®¾ç½®æè´¨ç›¸å…³å‚æ•° 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse1);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
@@ -103,12 +103,12 @@ void drawscence()
 	glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
 
 	
-	//»æÖÆµØ°å 
+	//ç»˜åˆ¶åœ°æ¿ 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texbackwall);
 	glColor3f(0.8f, 1.0f, 0.8f);
 	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 1.0f, 0.0f);                   //ÓÃÓÚ¶¨Òå·¨ÏßÏòÁ¿  	
+	glNormal3f(0.0f, 1.0f, 0.0f);                   //ç”¨äºå®šä¹‰æ³•çº¿å‘é‡  	
 	glVertex3f(-7.0f, -0.0f, 12.0f);
 	glVertex3f(-7.0f, -0.0f, -12.0f);
 	glVertex3f(7.0f, -0.0f, -12.0f);
@@ -116,12 +116,12 @@ void drawscence()
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
-	//»æÖÆÌì»¨°å
+	//ç»˜åˆ¶å¤©èŠ±æ¿
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texceiling);
 	glColor3f(0.8f, 1.0f, 0.8f);
 	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 1.0f, 0.0f);                   //ÓÃÓÚ¶¨Òå·¨ÏßÏòÁ¿  	
+	glNormal3f(0.0f, 1.0f, 0.0f);                   //ç”¨äºå®šä¹‰æ³•çº¿å‘é‡  	
 	glVertex3f(-7.0f, 7.0f, 12.0f);
 	glVertex3f(-7.0f, 7.0f, -12.0f);
 	glVertex3f(7.0f, 7.0f, -12.0f);
@@ -129,7 +129,7 @@ void drawscence()
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
-	//»æÖÆ×ó±ßÇ½¼Ó×ó±ß´°»§ 
+	//ç»˜åˆ¶å·¦è¾¹å¢™åŠ å·¦è¾¹çª—æˆ· 
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texwindow);
@@ -138,7 +138,7 @@ void drawscence()
 	for (int n = 0; n <= 1; n++)
 	{
 		glBegin(GL_QUADS);
-		glNormal3f(1.0, 0.0f, 0.0f);                   //ÓÃÓÚ¶¨Òå·¨ÏßÏò	Á¿
+		glNormal3f(1.0, 0.0f, 0.0f);                   //ç”¨äºå®šä¹‰æ³•çº¿å‘	é‡
 		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(10, 0, 0 + n * 12.0f);   	 			glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(10, 7.0f, 0 + n * 12.0f);   	 			glTexCoord2f(0.0f, 1.0f);
@@ -149,14 +149,14 @@ void drawscence()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	//»æÖÆÓÒ±ßÇ½¼ÓÃÅ 
+	//ç»˜åˆ¶å³è¾¹å¢™åŠ é—¨ 
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texdoor);
 	glPushMatrix();
 		glTranslatef(3.0f, 0.0f, 0.0f);
 		glBegin(GL_QUADS);
-		glNormal3f(1.0, 0.0f, 0.0f);                   //ÓÃÓÚ¶¨Òå·¨ÏßÏò	Á¿
+		glNormal3f(1.0, 0.0f, 0.0f);                   //ç”¨äºå®šä¹‰æ³•çº¿å‘	é‡
 		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(-10, 0, 12.0f);   	 	glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(-10, 7.0f, 12.0f);   	 	glTexCoord2f(0.0f, 1.0f);
@@ -166,17 +166,17 @@ void drawscence()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	//ºóÇ½
-	glEnable(GL_TEXTURE_2D);  	 	
-	glBindTexture(GL_TEXTURE_2D, texbackwall);         
-	glColor3f(1.0f, 1.0f, 1.0f);         
-	glBegin(GL_QUADS);         
-	glNormal3f(0.0f, 0.0f, 1.0f); //ÓÃÓÚ¶¨Òå·¨ÏßÏòÁ¿ 
-	glTexCoord2f(0.0f, 0.0f);  	 	
-	glVertex3f(-7.0f, 0.0f, 12.0f);			glTexCoord2f(0.0f, 1.0f);  	 	
-	glVertex3f(-7.0f, 7.0f, 12.0f);   	 	glTexCoord2f(1.0f, 1.0f);  	 	
-	glVertex3f(7.0f, 7.0f, 12.0f);   	 	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(7.0f, 0.0f, 12.0f);  	 	
+	//åå¢™
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texpole);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);  
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-70.0f, 0.0f, 12.0f);			glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-70.0f, 0.0f, 12.0f);  	 	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-70.0f, 0.0f, 12.0f);   	 	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(-70.0f, 0.0f, 12.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	

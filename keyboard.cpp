@@ -8,7 +8,7 @@
 extern float phi;
 extern float angle;
 extern float theta;
-extern bool bAnim, fan, bWire;
+extern bool bAnim, fan, bWire,color,spot;
 extern float light_pos[4];
 extern float center[3], eye[3], dir[3],c,h,r;
 
@@ -41,10 +41,8 @@ void dir_d()  {
 		center[2] = eye[2] + dir[2];
 }
 void dir_a(){
-	//   angle = angle + 5;
 		dir[0] = center[0] - eye[0];
 		dir[2] = center[2] - eye[2];
-		//  printf("dir0=%f,dir2=%f\n", dir[0], dir[2]);
 		dir[0] = dir[0] * cos(c*(-5)) - dir[2] * sin(c*(-5));
 		dir[2] = dir[0] * sin(c*(-5)) + dir[2] * cos(c*(-5));
 		center[0] = eye[0] + dir[0];
@@ -66,7 +64,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'f': fan = !fan;
 	case 'a': dir_a(); break;
 	case 'd': dir_d(); break;
-	case 'w': dir_w(); break;
+	case 'w': if (eye[2]<14) dir_w(); break;
 	case 's': dir_s(); break;
 
 	//light
@@ -83,14 +81,16 @@ void keyboard(unsigned char key, int x, int y)
 	//down
 	case 'm':light_pos[1] += 0.4f;break;
 	case '0':snapScreen(640, 640,"snap/snap.bmp"); break;
-		/*
+	
 	case '1':
-		direction[2] += 0.1;
+		color = !color;
 		break;
+	
 	case '2':{
-		direction[2] -= 0.1;
+		spot -= !spot;
 		break;
 	}
+	/*
 	case '3':{
 		direction[0] -= 0.1;
 		break;

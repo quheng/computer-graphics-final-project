@@ -7,13 +7,13 @@
 extern GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2, tv;
 
 void loadOBJ(){
-	//lamp = drawOBJ("obj/Lamp/lamp.obj");
+	lamp = drawOBJ("obj/Lamp/lamp.obj");
 	//sofa = drawOBJ("obj/Sofa/Sofa.obj");
 	coffeeTable = drawOBJ("obj/CoffeeTable/CoffeeTable.obj");
 	//settee = drawOBJ("obj/Settee/Settee.obj");
 	//sideTable1 = drawOBJ("obj/SideTable1/SideTable1.obj");
 	//sideTable2 = drawOBJ("obj/SideTable1/SideTable1.obj");
-	tv = drawOBJ("obj/tv/tv.obj");
+	//tv = drawOBJ("obj/tv/tv.obj");
 }
 
 GLuint drawOBJ(char * filename){
