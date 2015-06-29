@@ -90,110 +90,114 @@ void display()
 
 
 	glPushMatrix();
-	if (bAnim)
-		fRotate += 0.5f;
-	glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
-	glScalef(3, 3, 3);
 
-	glPushMatrix();
-	glScalef(0.4f, 0.4f, 0.4f);
-	glTranslatef(0.0f, -1.0, 0.0f);
-	drawscence();   //wall
-	glPopMatrix();
+		if (bAnim)									//场景旋转
+			fRotate += 0.5f;
+		glRotatef(fRotate, 0, 1.0f, 0);			// Rotate around Y axis
+		glScalef(3, 3, 3);
 
-	glPushMatrix();
-		for (int i = 0; i < 5; i++)
-		{
-			printf_s("%f\n",ctrlpoints[i][0][0]);
-			if (nurbs){
-				ctrlpoints[i][0][0] += 0.01;
-				if (ctrlpoints[i][0][0] > 3.0)
-					nurbs = 0;
-			}
-			else{
-				ctrlpoints[i][0][0] -= 0.01;
-				if (ctrlpoints[i][0][0] < -3.0)
-					nurbs = 1;
-			}
-		}
-		glTranslatef(0.2, 0.045, 2.0);
-		glScalef(0.1, 0.1, 0.1);
-		gluBeginSurface(theNurb1);
-		gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
-		gluEndSurface(theNurb1);
-	glPopMatrix();
-
-
-	glPushMatrix();
-	glTranslatef(0.05f, 1.2f, 1.0f);
-	glScalef(0.7f, 0.7f, 0.7f);
-	drawfan(fan);
-	glPopMatrix();
-
-	glPushMatrix();    //tv and tv table
-		glRotatef(180, 0, 1.0f, 0);
-		glTranslatef(0.0f, 0.1f, -4.0f);
-		glPushMatrix();
-			glTranslatef(0.0f, -0.3f, 0.0f);
-			glScalef(2.0f, 0.4f, 0.8f);
-			glColor3f(1.0, 0.4, 0.6);
-			glutSolidCube(1.0);
-			glRotatef(180, 0, 1.0f, 0);
+		glPushMatrix();								//墙壁
+			glScalef(0.4f, 0.4f, 0.4f);
+			glTranslatef(0.0f, -1.0, 0.0f);
+			drawscence();   //wall
 		glPopMatrix();
-		glPushMatrix();
-			glTranslatef(0.2f, 0.4f, 0.0f);
-			glScalef(0.18f, 0.18f, 0.18f);
-			glCallList(tv);
-		glPopMatrix();
-		glPushMatrix();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
-			gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
-			gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
-			glTranslatef(-0.025f, 0.5f, 0.05f);
-			glScalef(0.65f, 0.35f, 0.0f);
-			drawAVI();
-		glPopMatrix();
-	glPopMatrix();
 	
-	glPushMatrix();
-		glTranslatef(-0.1f, 0.0f, 0.0f);
 		glPushMatrix();
-			glTranslatef(-1.5f, 0.45f, -0.05f);
-			glScalef(0.18f, 0.18f, 0.18f);
-			glCallList(lamp);
+			glTranslatef(0.0f, 0.0, -1.0f);		//家具整体位置
+
+		glPushMatrix();							//nurbs曲面
+			for (int i = 0; i < 5; i++)
+			{
+				if (nurbs){
+					ctrlpoints[i][0][0] += 0.01;
+					if (ctrlpoints[i][0][0] > 3.0)
+						nurbs = 0;
+				}
+				else{
+					ctrlpoints[i][0][0] -= 0.01;
+					if (ctrlpoints[i][0][0] < -3.0)
+						nurbs = 1;
+				}
+			}
+			glTranslatef(0.2, 0.045, 2.0);
+			glScalef(0.1, 0.1, 0.1);
+			gluBeginSurface(theNurb1);
+			gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+			gluEndSurface(theNurb1);
 		glPopMatrix();
+
+
 		glPushMatrix();
-			glTranslatef(-1.5f, -0.12f, -0.03f);
+			glTranslatef(0.05f, 1.6f, 1.0f);
+			glScalef(0.7f, 0.7f, 0.7f);
+			drawfan(fan);
+		glPopMatrix();
+
+		glPushMatrix();    //tv and tv table
+			glRotatef(180, 0, 1.0f, 0);
+			glTranslatef(0.0f, 0.1f, -4.0f);
+			glPushMatrix();								//电视柜
+				glTranslatef(0.0f, -0.3f, 0.0f);
+				glScalef(2.0f, 0.4f, 0.8f);
+				glColor3f(1.0, 0.4, 0.6);
+				glutSolidCube(1.0);		
+				glRotatef(180, 0, 1.0f, 0);
+			glPopMatrix();
+			glPushMatrix();								//电视
+				glTranslatef(0.2f, 0.4f, 0.0f);
+				glScalef(0.18f, 0.18f, 0.18f);
+				glCallList(tv);
+			glPopMatrix();
+			glPushMatrix();								//电视画面
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// Set Texture Max Filter
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set Texture Min Filter
+				gluQuadricNormals(gluNewQuadric(), GLU_SMOOTH);						// Create Smooth Normals 
+				gluQuadricTexture(gluNewQuadric(), GL_TRUE);						// Create Texture Coords 
+				glTranslatef(-0.025f, 0.5f, 0.05f);
+				glScalef(0.65f, 0.35f, 0.0f);
+				drawAVI();
+			glPopMatrix();
+		glPopMatrix();
+	
+		glPushMatrix();
+			glTranslatef(-0.1f, 0.0f, 0.0f);
+			glPushMatrix();
+				glTranslatef(-1.5f, 0.45f, -0.05f);
+				glScalef(0.18f, 0.18f, 0.18f);
+				glCallList(lamp);
+			glPopMatrix();
+			glPushMatrix();
+				glTranslatef(-1.5f, -0.12f, -0.03f);
+				glScalef(0.08f, 0.08f, 0.08f);
+				glCallList(sideTable1);
+			glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0.05f, -0.01f, -0.03f);
+			glScalef(0.6f, 0.6f, 1.5f);
+			glCallList(sofa);
+		glPopMatrix();
+	
+		glPushMatrix();
+			glTranslatef(0.04f, -0.19f, 2.0f);
+			glScalef(0.5f, 0.5f, 0.5f);
+			glCallList(coffeeTable);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-1.5f, -0.01f, 2.0f);
+			glScalef(0.3f, 0.3f, 0.3f);
+			glCallList(settee);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-1.5f, -0.12f, 3.5f);
 			glScalef(0.08f, 0.08f, 0.08f);
-			glCallList(sideTable1);
+			glCallList(sideTable2);
 		glPopMatrix();
-	glPopMatrix();
 
-	glPushMatrix();
-	glTranslatef(0.05f, -0.01f, -0.03f);
-	glScalef(0.6f, 0.6f, 1.5f);
-	glCallList(sofa);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.04f, -0.19f, 2.0f);
-	glScalef(0.5f, 0.5f, 0.5f);
-	glCallList(coffeeTable);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.5f, -0.01f, 2.0f);
-	glScalef(0.3f, 0.3f, 0.3f);
-	glCallList(settee);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.5f, -0.12f, 3.5f);
-	glScalef(0.08f, 0.08f, 0.08f);
-	glCallList(sideTable2);
-	glPopMatrix();
-
+		glPopMatrix();
 	glPopMatrix();
 	glutSwapBuffers();
 }

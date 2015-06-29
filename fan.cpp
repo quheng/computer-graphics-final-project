@@ -50,7 +50,7 @@ void drawfan(bool rot){
 	glPopMatrix();
 	*/
 	if (rot){
-		fantheta += 1;
+		fantheta += 10;
 		if (fantheta > 360)
 			fantheta = 0;
 	}

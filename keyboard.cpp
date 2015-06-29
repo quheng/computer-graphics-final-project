@@ -11,6 +11,7 @@ extern float theta;
 extern bool bAnim, fan, bWire,color,spot;
 extern float light_pos[4];
 extern float center[3], eye[3], dir[3],c,h,r;
+extern int backwall;
 
 float eyeDeX;
 float eyeDeZ;
@@ -64,7 +65,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'f': fan = !fan;
 	case 'a': dir_a(); break;
 	case 'd': dir_d(); break;
-	case 'w': if (eye[2]<14) dir_w(); break;
+	case 'w': dir_w(); break;
 	case 's': dir_s(); break;
 
 	//light
@@ -85,11 +86,14 @@ void keyboard(unsigned char key, int x, int y)
 	case '1':
 		color = !color;
 		break;
+
 	
-	case '2':{
-		spot -= !spot;
+	case'2':
+		backwall ++;
+		backwall %= 4;
 		break;
-	}
+
+
 	/*
 	case '3':{
 		direction[0] -= 0.1;

@@ -21,23 +21,25 @@ float direction[] = { 0, 0, 0 };//direction of spot light
 float degree = 10;//degree of spot light
 float pos[] = { 0, 0, 0, 1 };
 
-float center[3] = { 0, 1.5, 8 }, eye[3] = { 0, 1.5, -7 }, dir[3] = {0,0,0};
+float center[3] = { 0, 1.5, 9 }, eye[3] = { 0, 1.5, -6 }, dir[3] = {0,0,0};
 float fRotate = 0.0f;
 
-float oldmx = 0, oldmy = 0, h = 1.5, r = 15, c = G_PI / 180, du = -90;    //mouse
+float oldmx = 0, oldmy = 0, h = 2, r = 15, c = G_PI / 180, du = -90;    //mouse
 bool fan = true;		//control the fan
 bool bAnim = false;      //the flag of rotation
 bool bWire = false;
 bool color = true;		//control the color of light
 bool spot = false;		//control the color of spot
 
-float light_pos[4] = { 0, 0, 0, 1 };   //position of light
+float light_pos[4] = { 0, 0, 6, 1 };   //position of light
 
+
+int backwall = 0;
 /*obj model*/
 GLuint lamp, sofa, coffeeTable, settee, sideTable1, sideTable2,tv;
 
 //room
-GLuint texbackwall, texwindow, texdoor, texceiling, texpole;
+GLuint texbackwall[5], texwindow, texdoor, texceiling, texpole,texfloor;
 
 //nurbs
 GLUnurbsObj *theNurb1;
@@ -66,10 +68,15 @@ void main()
 }
 void initGL(){
 	//wall
-	texbackwall = load_texture("b.bmp");
-	texwindow = load_texture("window.bmp");
-	texdoor = load_texture("door.bmp");
-	texceiling = load_texture("ceiling.bmp");
+	texbackwall[0] = load_texture("tex/b1.bmp");
+	texbackwall[1] = load_texture("tex/b2.bmp");
+	texbackwall[2] = load_texture("tex/b3.bmp");
+	texbackwall[3] = load_texture("tex/b4.bmp");
+
+	texwindow = load_texture("tex/window.bmp");
+	texdoor = load_texture("tex/door.bmp");
+	texceiling = load_texture("tex/ceiling.bmp");
+	texfloor = load_texture("tex/floor.bmp");
 
 	theNurb1 = gluNewNurbsRenderer();
 	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
@@ -107,8 +114,8 @@ void onMouseMove(int x, int y) {
 	eye[0] = center[0] + r*cos(c*du);
 	eye[2] = center[2] + r*sin(c*du);
 	h += 0.03f*(y - oldmy); //鼠标在窗口y轴方向上的改变加到视点的y坐标上，就上下转了
-	if (h>3.5f) h = 3.5f; //视点y坐标作一些限制，不会使视点太奇怪
-	else if (h<-3.5f) h = -3.5f;
+	if (h>5.5f) h = 5.5f; //视点y坐标作一些限制，不会使视点太奇怪
+	else if (h<-5.5f) h = -5.5f;
 	eye[1] = h;
 	oldmx = x, oldmy = y; //把此时的鼠标坐标作为旧值，为下一次计算增量做准备
 }
