@@ -107,10 +107,10 @@ void drawscence()
 	glColor3f(0.8f, 1.0f, 0.8f);
 	glBegin(GL_QUADS);
 	glNormal3f(0.0f, 1.0f, 0.0f);                   //ÓÃÓÚ¶¨Òå·¨ÏßÏòÁ¿  	
-	glVertex3f(-7.0f, 7.0f, 12.0f);
-	glVertex3f(-7.0f, 7.0f, -12.0f);
-	glVertex3f(7.0f, 7.0f, -12.0f);
-	glVertex3f(7.0f, 7.0f, 12.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-7.0f, 7.0f, 12.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-7.0f, 7.0f, -12.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(7.0f, 7.0f, -12.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(7.0f, 7.0f, 12.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
